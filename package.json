@@ -1,0 +1,22 @@
+{
+  "name": "issacprogress",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "scrape:achievements": "node scripts/scrape-achievements.js"
+  },
+  "dependencies": {
+    "@vicons/ionicons5": "^0.12.0",
+    "naive-ui": "^2.44.1",
+    "vue": "^3.5.39"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "cheerio": "^1.2.0",
+    "vite": "^6.4.3"
+  }
+}
