@@ -1,0 +1,84 @@
+file: D:\Coding\issacProgress\rep+persistentgamedata1.dat
+size: 12100
+header: ISAACNGSAVE09R  
+
+=== sections ===
+  [#0] count=642 start=0x20 (32)
+  [#1] count=523 start=0x2ae (686)
+  [#2] count=14 start=0xae6 (2790)
+  [#3] count=733 start=0xb2a (2858)
+  [#4] count=7 start=0xe13 (3603)
+  [#5] count=104 start=0xe26 (3622)
+  [#6] count=46 start=0xe9a (3738)
+  [#7] count=27 start=0xed4 (3796)
+  [#8] count=2 start=0xf4c (3916)
+  [#9] count=80 start=0xf60 (3936)
+
+checklist section base (sections[1]) = 0x2ae
+  regular chars base = 0x31a
+  Forgotten special  = 0x5da
+  Bethany+ / Tainted = 0x5ca
+
+=== marks per character (0=╨╜╨╡╤В, 1=normal, 2=hard) ===
+ 0 Isaac          HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
+ 1 Magdalene      HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
+ 2 Cain           HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
+ 3 Judas          HHHHHHHHHH..  [2,2,2,2,2,2,2,2,2,2,0,0]
+ 4 ???            HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
+ 5 Eve            HHHHHHHHHH..  [2,2,2,2,2,2,2,2,2,2,0,0]
+ 6 Samson         HH..H.Hn.H..  [2,2,0,0,2,0,2,1,0,2,0,0]
+ 7 Azazel         HHHHHHHnH...  [2,2,2,2,2,2,2,1,2,0,0,0]
+ 8 Lazarus        ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+ 9 Eden           1515HHHHHHHH..  [15,15,2,2,2,2,2,2,2,2,0,0]
+10 The Lost       HHH.HHHnHH..  [2,2,2,0,2,2,2,1,2,2,0,0]
+11 Lilith         15HHHHHHHHH..  [15,2,2,2,2,2,2,2,2,2,0,0]
+12 Keeper         ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+13 Apollyon       HHHHHHHHHH..  [2,2,2,2,2,2,2,2,2,2,0,0]
+14 Forgotten      HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
+15 Bethany        ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+16 Jacob & Esau   ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+17 T. Isaac       ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+18 T. Magdalene   ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+19 T. Cain        ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+20 T. Judas       ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+21 T. ???         ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+22 T. Eve         ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+23 T. Samson      ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+24 T. Azazel      ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+25 T. Lazarus     ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+26 T. Eden        ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+27 T. Lost        ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+28 T. Lilith      ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+29 T. Keeper      ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+30 T. Apollyon    ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+31 T. Forgotten   ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+32 T. Bethany     ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+33 T. Jacob       ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+
+=== Isaac (0) raw offsets ===
+  Mom's Heart    @ 0x031a = 2
+  Isaac          @ 0x0352 = 2
+  Satan          @ 0x038a = 2
+  Boss Rush      @ 0x03c2 = 2
+  ???            @ 0x03fa = 2
+  The Lamb       @ 0x0432 = 2
+  Mega Satan     @ 0x047e = 2
+  Ultra Greed    @ 0x04b6 = 1
+  Hush           @ 0x04ee = 2
+  Delirium       @ 0x0562 = 2
+  Mother         @ 0x094a = 0
+  The Beast      @ 0x09d2 = 0
+
+=== T. Isaac (17) raw offsets ===
+  Mom's Heart    @ 0x060e = 0
+  Isaac          @ 0x065a = 0
+  Satan          @ 0x06a6 = 0
+  Boss Rush      @ 0x06f2 = 0
+  ???            @ 0x073e = 0
+  The Lamb       @ 0x078a = 0
+  Mega Satan     @ 0x07d6 = 0
+  Ultra Greed    @ 0x0822 = 0
+  Hush           @ 0x086e = 0
+  Delirium       @ 0x0906 = 0
+  Mother         @ 0x098e = 0
+  The Beast      @ 0x0a16 = 0

@@ -3,7 +3,7 @@
     <div
       class="grid"
       :style="{
-        gridTemplateColumns: `48px repeat(${COLS}, minmax(28px, 1fr))`,
+        gridTemplateColumns: `40px repeat(${COLS}, 90px)`,
       }"
     >
       <div class="corner" />
@@ -378,14 +378,16 @@ onUnmounted(() => {
 
 <style scoped>
 .grid-wrap {
-  overflow: visible;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
 }
 
 .grid {
   display: grid;
-  gap: 4px;
-  width: 100%;
-  min-width: 520px;
+  gap: 3px;
+  width: max-content;
+  margin: 0 auto;
 }
 
 .corner,
@@ -393,7 +395,7 @@ onUnmounted(() => {
   position: sticky;
   top: 0;
   z-index: 5;
-  min-height: 28px;
+  min-height: 26px;
   background: #1a1b1e;
   box-shadow: 0 1px 0 #2a2d33;
 }
@@ -415,15 +417,16 @@ onUnmounted(() => {
 .row-header {
   justify-content: flex-end;
   padding-right: 8px;
+  font-size: 0.7rem;
 }
 
 .cell {
-  aspect-ratio: 1;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  min-height: 36px;
   padding: 3px;
   cursor: pointer;
   border: 2px solid transparent;
@@ -540,8 +543,8 @@ a.popup-icon-wrap:hover {
 }
 
 .popup-icon {
-  width: 64px;
-  height: 64px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
   image-rendering: pixelated;
 }

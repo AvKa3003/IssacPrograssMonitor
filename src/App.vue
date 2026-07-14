@@ -63,9 +63,26 @@
             </n-tab-pane>
 
             <n-tab-pane name="groups" tab="По группам">
-              <p class="groups-placeholder">
-                Группировка достижений по смыслу появится здесь позже.
-              </p>
+              <n-tabs
+                v-model:value="groupsSection"
+                type="line"
+                :animated="false"
+                class="groups-inner-tabs"
+              >
+                <n-tab-pane name="characters" tab="Лист персонажей">
+                  <CharacterSheets
+                    v-if="characterSheets.length"
+                    :sheets="characterSheets"
+                    :achievements="achievements"
+                    :checklist="checklist"
+                    :meta-by-id="metaById"
+                  />
+                  <p v-else class="groups-placeholder">
+                    Нет данных листа. Выполни:
+                    <code>npm run scrape:sheets</code>
+                  </p>
+                </n-tab-pane>
+              </n-tabs>
             </n-tab-pane>
           </n-tabs>
         </template>
@@ -80,14 +97,18 @@ import { darkTheme } from 'naive-ui'
 import FileDropZone from './components/FileDropZone.vue'
 import AchievementGrid from './components/AchievementGrid.vue'
 import AchievementCards from './components/AchievementCards.vue'
+import CharacterSheets from './components/CharacterSheets.vue'
 import { parseAchievements } from './parseSave.js'
 import { loadSavedProgress, saveProgress, clearSavedProgress } from './saveStore.js'
 
 const fileName = ref('')
 const achievements = ref(null)
+const checklist = ref(null)
 const unlockedCount = ref(0)
 const activeTab = ref('achievements')
+const groupsSection = ref('characters')
 const achievementMeta = ref([])
+const characterSheets = ref([])
 const onlyLocked = ref(false)
 const viewMode = ref('grid')
 
@@ -110,6 +131,7 @@ function persist() {
   saveProgress({
     fileName: fileName.value,
     achievements: achievements.value,
+    checklist: checklist.value,
     unlockedCount: unlockedCount.value,
     onlyLocked: onlyLocked.value,
     viewMode: viewMode.value,
@@ -125,6 +147,7 @@ onMounted(async () => {
   if (cached) {
     fileName.value = cached.fileName
     achievements.value = cached.achievements
+    checklist.value = cached.checklist || null
     unlockedCount.value = cached.unlockedCount
     onlyLocked.value = cached.onlyLocked
     viewMode.value = cached.viewMode
@@ -133,11 +156,22 @@ onMounted(async () => {
 
   try {
     const res = await fetch(`${import.meta.env.BASE_URL}data/achievements.json`)
-    if (!res.ok) return
-    const data = await res.json()
-    achievementMeta.value = data.achievements || []
+    if (res.ok) {
+      const data = await res.json()
+      achievementMeta.value = data.achievements || []
+    }
   } catch {
-    /* мета ещё не спарсена — сетка покажет номера */
+    /* мета ещё не спарсена */
+  }
+
+  try {
+    const res = await fetch(`${import.meta.env.BASE_URL}data/character-sheets.json`)
+    if (res.ok) {
+      const data = await res.json()
+      characterSheets.value = data.sheets || []
+    }
+  } catch {
+    /* лист ещё не спарсен */
   }
 })
 
@@ -146,12 +180,14 @@ async function onFile(file) {
     const buffer = await file.arrayBuffer()
     const result = parseAchievements(buffer)
     achievements.value = result.achievements
+    checklist.value = result.checklist
     unlockedCount.value = result.unlockedCount
     fileName.value = file.name
     activeTab.value = 'achievements'
     persist()
   } catch (err) {
     achievements.value = null
+    checklist.value = null
     unlockedCount.value = 0
     fileName.value = ''
     clearSavedProgress()
@@ -162,7 +198,7 @@ async function onFile(file) {
 
 <style scoped>
 .app {
-  max-width: 960px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 24px 16px 48px;
 }
@@ -204,6 +240,14 @@ async function onFile(file) {
   margin: 24px 0;
   color: #9ca3af;
   font-size: 0.95rem;
+}
+
+.groups-inner-tabs {
+  margin-top: 4px;
+}
+
+.groups-placeholder code {
+  color: #70c0e8;
 }
 </style>
 

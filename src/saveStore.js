@@ -4,6 +4,7 @@ const STORAGE_KEY = 'isaac-progress:last-save'
  * @typedef {{
  *   fileName: string,
  *   achievements: boolean[],
+ *   checklist?: number[][] | null,
  *   unlockedCount: number,
  *   onlyLocked?: boolean,
  *   viewMode?: 'grid' | 'cards',
@@ -21,6 +22,7 @@ export function loadSavedProgress() {
     return {
       fileName: data.fileName,
       achievements: data.achievements.map(Boolean),
+      checklist: Array.isArray(data.checklist) ? data.checklist : null,
       unlockedCount: Number(data.unlockedCount) || 0,
       onlyLocked: Boolean(data.onlyLocked),
       viewMode: data.viewMode === 'cards' ? 'cards' : 'grid',
@@ -37,6 +39,7 @@ export function saveProgress(data) {
     const payload = {
       fileName: data.fileName,
       achievements: data.achievements,
+      checklist: data.checklist || null,
       unlockedCount: data.unlockedCount,
       onlyLocked: data.onlyLocked,
       viewMode: data.viewMode,
