@@ -2,6 +2,7 @@
   <div class="grid-wrap" ref="wrapRef">
     <div
       class="grid"
+      :class="{ 'headers-hidden': onlyLocked }"
       :style="{
         gridTemplateColumns: `40px repeat(${COLS}, 90px)`,
       }"
@@ -418,6 +419,14 @@ onUnmounted(() => {
   justify-content: flex-end;
   padding-right: 8px;
   font-size: 0.7rem;
+}
+
+/* Место под заголовки сохраняем, чтобы сетка не прыгала */
+.grid.headers-hidden .corner,
+.grid.headers-hidden .col-header,
+.grid.headers-hidden .row-header {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .cell {

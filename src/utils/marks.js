@@ -4,6 +4,10 @@
  * 6 MegaSatan, 7 Greed, 8 Hush, 9 Delirium, 10 Mother, 11 Beast
  */
 
+export const MARKS_PER_CHARACTER = 12
+export const NORMAL_CHARACTER_COUNT = 17
+export const TAINTED_CHARACTER_COUNT = 17
+
 /** @typedef {'none' | 'normal' | 'hard'} MarkLevel */
 
 /** Solo-часть битовой маски метки */
@@ -20,6 +24,49 @@ export function isDone(raw) {
 
 export function isHard(raw) {
   return soloLevel(raw) >= 2
+}
+
+/**
+ * Прогресс по меткам сейва (не ачивки): слот метки × персонаж.
+ * done = хотя бы normal (или hard).
+ * @param {number[][] | null} checklist
+ * @returns {{
+ *   normal: { done: number, total: number },
+ *   tainted: { done: number, total: number },
+ *   all: { done: number, total: number },
+ * }}
+ */
+export function countMarksProgress(checklist) {
+  const normalTotal = NORMAL_CHARACTER_COUNT * MARKS_PER_CHARACTER
+  const taintedTotal = TAINTED_CHARACTER_COUNT * MARKS_PER_CHARACTER
+  let normalDone = 0
+  let taintedDone = 0
+
+  if (checklist) {
+    for (let c = 0; c < NORMAL_CHARACTER_COUNT; c++) {
+      const marks = checklist[c]
+      if (!marks) continue
+      for (let m = 0; m < MARKS_PER_CHARACTER; m++) {
+        if (isDone(marks[m])) normalDone++
+      }
+    }
+    for (let c = 0; c < TAINTED_CHARACTER_COUNT; c++) {
+      const marks = checklist[NORMAL_CHARACTER_COUNT + c]
+      if (!marks) continue
+      for (let m = 0; m < MARKS_PER_CHARACTER; m++) {
+        if (isDone(marks[m])) taintedDone++
+      }
+    }
+  }
+
+  return {
+    normal: { done: normalDone, total: normalTotal },
+    tainted: { done: taintedDone, total: taintedTotal },
+    all: {
+      done: normalDone + taintedDone,
+      total: normalTotal + taintedTotal,
+    },
+  }
 }
 
 /** @returns {MarkLevel} */
@@ -116,6 +163,7 @@ export const TAINTED_HEART_ICON = {
   title: 'Оно Живое',
   iconUrl:
     'https://static.wikia.nocookie.net/bindingofisaac/images/3/3c/Blist1x.png/revision/latest?path-prefix=ru',
+  href: 'https://bindingofisaac.fandom.com/ru/wiki/%D0%9E%D0%BD%D0%BE_%D0%96%D0%B8%D0%B2%D0%BE%D0%B5',
 }
 
 const TAINTED_COLUMN_MARKS = {

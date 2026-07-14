@@ -1,5 +1,26 @@
 <template>
   <div class="character-sheets">
+    <div class="marks-progress">
+      <div class="marks-progress-item">
+        <span class="marks-progress-label">Обычные</span>
+        <n-tag type="info" size="large">
+          {{ marksProgress.normal.done }} / {{ marksProgress.normal.total }}
+        </n-tag>
+      </div>
+      <div class="marks-progress-item">
+        <span class="marks-progress-label">Порченые</span>
+        <n-tag type="warning" size="large">
+          {{ marksProgress.tainted.done }} / {{ marksProgress.tainted.total }}
+        </n-tag>
+      </div>
+      <div class="marks-progress-item">
+        <span class="marks-progress-label">Всего</span>
+        <n-tag type="success" size="large">
+          {{ marksProgress.all.done }} / {{ marksProgress.all.total }}
+        </n-tag>
+      </div>
+    </div>
+
     <div class="sheet-tabs-bar">
       <n-button-group size="large">
         <n-button
@@ -28,7 +49,11 @@
               v-for="head in headerCells(sheet)"
               :key="head.key"
               class="milestone-head"
-              :class="{ tick: head.kind === 'tick', spacer: head.kind === 'spacer' }"
+              :class="{
+                tick: head.kind === 'tick',
+                spacer: head.kind === 'spacer',
+                character: head.kind === 'character',
+              }"
               :colspan="head.colspan || 1"
             >
               <template v-if="head.kind === 'group'">
@@ -36,40 +61,73 @@
                   class="group-icons"
                   :class="{ 'parts-2': head.parts?.length === 2 }"
                 >
-                  <img
+                  <component
+                    :is="part.href ? 'a' : 'span'"
                     v-for="(part, pi) in head.parts"
                     :key="pi"
-                    class="milestone-icon"
-                    :src="part.iconUrl"
-                    :alt="part.title || ''"
+                    class="icon-link"
+                    :href="part.href || undefined"
+                    :target="part.href ? '_blank' : undefined"
+                    :rel="part.href ? 'noopener noreferrer' : undefined"
                     :title="part.title || ''"
-                    referrerpolicy="no-referrer"
-                    loading="lazy"
-                  />
+                  >
+                    <img
+                      class="milestone-icon"
+                      :src="part.iconUrl"
+                      :alt="part.title || ''"
+                      referrerpolicy="no-referrer"
+                      loading="lazy"
+                    />
+                  </component>
                 </div>
               </template>
               <template v-else-if="head.kind === 'tick'">
-                <img
+                <component
+                  :is="head.href ? 'a' : 'span'"
                   v-if="head.iconUrl"
-                  class="tick-head-icon"
-                  :src="head.iconUrl"
-                  :alt="head.title || ''"
+                  class="icon-link"
+                  :href="head.href || undefined"
+                  :target="head.href ? '_blank' : undefined"
+                  :rel="head.href ? 'noopener noreferrer' : undefined"
                   :title="head.title || ''"
-                  referrerpolicy="no-referrer"
-                  loading="lazy"
-                />
+                >
+                  <img
+                    class="tick-head-icon"
+                    :src="head.iconUrl"
+                    :alt="head.title || ''"
+                    referrerpolicy="no-referrer"
+                    loading="lazy"
+                  />
+                </component>
               </template>
               <template v-else-if="head.iconUrl">
-                <img
-                  class="milestone-icon"
-                  :src="head.iconUrl"
-                  :alt="head.title || ''"
+                <component
+                  :is="head.href ? 'a' : 'span'"
+                  class="icon-link"
+                  :href="head.href || undefined"
+                  :target="head.href ? '_blank' : undefined"
+                  :rel="head.href ? 'noopener noreferrer' : undefined"
                   :title="head.title || ''"
-                  referrerpolicy="no-referrer"
-                  loading="lazy"
-                />
+                >
+                  <img
+                    class="milestone-icon"
+                    :src="head.iconUrl"
+                    :alt="head.title || ''"
+                    referrerpolicy="no-referrer"
+                    loading="lazy"
+                  />
+                </component>
               </template>
-              <span v-else-if="head.title" class="head-label">{{ head.title }}</span>
+              <component
+                :is="head.href ? 'a' : 'span'"
+                v-else-if="head.title"
+                class="head-label"
+                :href="head.href || undefined"
+                :target="head.href ? '_blank' : undefined"
+                :rel="head.href ? 'noopener noreferrer' : undefined"
+              >
+                {{ head.title }}
+              </component>
             </th>
           </tr>
         </thead>
@@ -234,6 +292,7 @@ import { allowFandomImages } from '../utils/achievements.js'
 import {
   CHAR_INDEX_BY_NAME,
   columnMarkSpec,
+  countMarksProgress,
   hasTickRow,
   markLevel,
   resolveCellLevel,
@@ -273,6 +332,8 @@ const anchorRect = ref(null)
 
 const activeId = computed(() => pinnedId.value || hoveredId.value)
 const activeRowKey = computed(() => pinnedRowKey.value || hoverRowKey.value)
+
+const marksProgress = computed(() => countMarksProgress(props.checklist))
 
 const activeCell = computed(() => {
   if (!activeId.value) return null
@@ -342,6 +403,7 @@ function headerCells(sheet) {
         kind: 'character',
         title: col.title,
         iconUrl: col.iconUrl,
+        href: col.href || null,
       })
       if (sheet.id === 'tainted') {
         out.push({
@@ -349,6 +411,7 @@ function headerCells(sheet) {
           kind: 'tick',
           title: TAINTED_HEART_ICON.title,
           iconUrl: TAINTED_HEART_ICON.iconUrl,
+          href: TAINTED_HEART_ICON.href,
         })
       }
       continue
@@ -363,17 +426,17 @@ function headerCells(sheet) {
           kind: 'tick',
           title: part.title,
           iconUrl: part.iconUrl,
+          href: part.href || null,
         })
       }
       out.push({
         key: `ach-${col.index}`,
-        kind: 'group-ach',
+        kind: 'group',
         title: col.title,
         iconUrl: null,
+        href: null,
         parts: col.parts,
       })
-      // Пустой заголовок над иконкой достижения — рисуем мини-группу
-      out[out.length - 1].kind = 'group'
       continue
     }
 
@@ -382,6 +445,7 @@ function headerCells(sheet) {
       kind: 'milestone',
       title: col.title,
       iconUrl: col.iconUrl,
+      href: col.href || null,
     })
   }
   return out
@@ -538,6 +602,29 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
 </script>
 
 <style scoped>
+.marks-progress {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 28px;
+  margin-bottom: 14px;
+}
+
+.marks-progress-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.marks-progress-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
 .sheet-tabs-bar {
   display: flex;
   justify-content: center;
@@ -570,6 +657,12 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   background: #fff;
   border-radius: 6px;
   line-height: 0;
+}
+
+.milestone-head.character {
+  width: 72px;
+  min-width: 72px;
+  max-width: 72px;
 }
 
 .milestone-head.tick {
@@ -622,6 +715,23 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   font-size: 0.7rem;
   line-height: 1.2;
   color: #9ca3af;
+  text-decoration: none;
+}
+
+a.head-label:hover {
+  color: #70c0e8;
+  text-decoration: underline;
+}
+
+.milestone-head .icon-link {
+  display: inline-flex;
+  text-decoration: none;
+  line-height: 0;
+}
+
+.milestone-head a.icon-link:hover {
+  outline: 1px solid #70c0e8;
+  border-radius: 4px;
 }
 
 .char-cell,
@@ -638,8 +748,13 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   box-sizing: border-box;
 }
 
-.char-cell.summary {
+.char-cell {
   width: 72px;
+  min-width: 72px;
+  max-width: 72px;
+}
+
+.char-cell.summary {
   line-height: 1.2;
 }
 
@@ -737,6 +852,7 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
 
 .icon-link {
   display: inline-flex;
+  text-decoration: none;
 }
 </style>
 
