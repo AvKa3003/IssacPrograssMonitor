@@ -397,6 +397,11 @@ export function useAnchoredPopup(options = {}) {
       return 'unpinned'
     }
 
+    // одна мягкая фиксация за раз — предыдущую закрываем
+    for (const win of [...windows.value]) {
+      if (!win.detached) closeWindow(win.key)
+    }
+
     zCounter += 1
     const fromHover =
       hoverKey.value === key
