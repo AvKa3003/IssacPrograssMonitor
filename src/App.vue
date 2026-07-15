@@ -83,81 +83,57 @@
                   </p>
                 </n-tab-pane>
                 <n-tab-pane name="char-unlocks" tab="Персонажи">
-                  <div class="stats groups-filters">
-                    <n-checkbox v-model:checked="groupsOnlyLocked">
-                      Только неоткрытые
-                    </n-checkbox>
-                  </div>
-                  <AchievementCards
+                  <GroupAchievementsPanel
+                    v-model:only-locked="groupsOnlyLocked"
+                    v-model:view-mode="groupsViewMode"
                     :achievements="achievements"
                     :meta-by-id="metaById"
                     :ids="characterUnlockIds"
-                    :only-locked="groupsOnlyLocked"
                   />
                 </n-tab-pane>
                 <n-tab-pane name="story-progress" tab="Прогресс прохождения">
-                  <div class="stats groups-filters">
-                    <n-checkbox v-model:checked="groupsOnlyLocked">
-                      Только неоткрытые
-                    </n-checkbox>
-                  </div>
-                  <AchievementCards
+                  <GroupAchievementsPanel
+                    v-model:only-locked="groupsOnlyLocked"
+                    v-model:view-mode="groupsViewMode"
                     :achievements="achievements"
                     :meta-by-id="metaById"
                     :ids="storyProgressIds"
-                    :only-locked="groupsOnlyLocked"
                   />
                 </n-tab-pane>
                 <n-tab-pane name="challenges" tab="Испытания">
-                  <div class="stats groups-filters">
-                    <n-checkbox v-model:checked="groupsOnlyLocked">
-                      Только неоткрытые
-                    </n-checkbox>
-                  </div>
-                  <AchievementCards
+                  <GroupAchievementsPanel
+                    v-model:only-locked="groupsOnlyLocked"
+                    v-model:view-mode="groupsViewMode"
                     :achievements="achievements"
                     :meta-by-id="metaById"
                     :ids="challengeIds"
-                    :only-locked="groupsOnlyLocked"
                   />
                 </n-tab-pane>
                 <n-tab-pane name="misc" tab="Разное">
-                  <div class="stats groups-filters">
-                    <n-checkbox v-model:checked="groupsOnlyLocked">
-                      Только неоткрытые
-                    </n-checkbox>
-                  </div>
-                  <AchievementCards
+                  <GroupAchievementsPanel
+                    v-model:only-locked="groupsOnlyLocked"
+                    v-model:view-mode="groupsViewMode"
                     :achievements="achievements"
                     :meta-by-id="metaById"
                     :ids="miscIds"
-                    :only-locked="groupsOnlyLocked"
                   />
                 </n-tab-pane>
                 <n-tab-pane name="special" tab="Особые условия">
-                  <div class="stats groups-filters">
-                    <n-checkbox v-model:checked="groupsOnlyLocked">
-                      Только неоткрытые
-                    </n-checkbox>
-                  </div>
-                  <AchievementCards
+                  <GroupAchievementsPanel
+                    v-model:only-locked="groupsOnlyLocked"
+                    v-model:view-mode="groupsViewMode"
                     :achievements="achievements"
                     :meta-by-id="metaById"
                     :ids="specialConditionIds"
-                    :only-locked="groupsOnlyLocked"
                   />
                 </n-tab-pane>
                 <n-tab-pane name="donation" tab="Донатные машины">
-                  <div class="stats groups-filters">
-                    <n-checkbox v-model:checked="groupsOnlyLocked">
-                      Только неоткрытые
-                    </n-checkbox>
-                  </div>
-                  <AchievementCards
+                  <GroupAchievementsPanel
+                    v-model:only-locked="groupsOnlyLocked"
+                    v-model:view-mode="groupsViewMode"
                     :achievements="achievements"
                     :meta-by-id="metaById"
                     :ids="donationIds"
-                    :only-locked="groupsOnlyLocked"
                   />
                 </n-tab-pane>
                 <n-tab-pane
@@ -199,6 +175,7 @@ import FileDropZone from './components/FileDropZone.vue'
 import AchievementGrid from './components/AchievementGrid.vue'
 import AchievementCards from './components/AchievementCards.vue'
 import CharacterSheets from './components/CharacterSheets.vue'
+import GroupAchievementsPanel from './components/GroupAchievementsPanel.vue'
 import { parseAchievements } from './parseSave.js'
 import { loadSavedProgress, saveProgress, clearSavedProgress } from './saveStore.js'
 import {
@@ -223,6 +200,7 @@ const characterSheets = ref([])
 const onlyLocked = ref(false)
 const groupsOnlyLocked = ref(false)
 const viewMode = ref('grid')
+const groupsViewMode = ref('cards')
 
 const lockedCount = computed(() =>
   achievements.value
@@ -366,10 +344,6 @@ async function onFile(file) {
 
 .view-switch {
   margin-left: auto;
-}
-
-.groups-filters {
-  margin-bottom: 8px;
 }
 
 .groups-placeholder {

@@ -1,5 +1,8 @@
 <template>
-  <div class="grid-wrap" ref="wrapRef">
+  <p v-if="showEmpty" class="grid-empty">
+    В этой вкладке всё выполнено
+  </p>
+  <div v-else class="grid-wrap" ref="wrapRef">
     <div
       class="grid"
       :class="{ 'headers-hidden': onlyLocked }"
@@ -149,6 +152,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  /** Если задано — только эти ID, в этом порядке */
+  ids: {
+    type: Array,
+    default: null,
+  },
 })
 
 const wrapRef = ref(null)
@@ -161,20 +169,39 @@ const popupPos = ref({ left: 0, top: 0, width: POPUP_WIDTH, maxHeight: null })
 let hideTimer = null
 let placeRaf = 0
 
-const rows = computed(() => {
-  const items = buildAchievementItems(props.achievements, props.metaById, {
-    onlyLocked: props.onlyLocked,
+function buildItems() {
+  const built = buildAchievementItems(props.achievements, props.metaById, {
+    onlyLocked: false,
     baseUrl: import.meta.env.BASE_URL,
   })
+  if (!props.ids?.length) {
+    return props.onlyLocked ? built.filter((i) => !i.unlocked) : built
+  }
+  const byId = new Map(built.map((item) => [item.id, item]))
+  const out = []
+  for (const id of props.ids) {
+    const item = byId.get(id)
+    if (item) out.push(item)
+  }
+  return props.onlyLocked ? out.filter((i) => !i.unlocked) : out
+}
 
+const items = computed(() => buildItems())
+
+const rows = computed(() => {
+  const list = items.value
   const result = []
-  for (let i = 0; i < items.length; i += COLS) {
-    const slice = items.slice(i, i + COLS)
+  for (let i = 0; i < list.length; i += COLS) {
+    const slice = list.slice(i, i + COLS)
     while (slice.length < COLS) slice.push(null)
     result.push(slice)
   }
   return result
 })
+
+const showEmpty = computed(
+  () => props.onlyLocked && items.value.length === 0,
+)
 
 watch(
   () => props.onlyLocked,
@@ -378,6 +405,13 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.grid-empty {
+  margin: 24px 0;
+  color: #9ca3af;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
 .grid-wrap {
   display: flex;
   justify-content: center;
