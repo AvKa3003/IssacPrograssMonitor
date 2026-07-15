@@ -1,5 +1,8 @@
 <template>
-  <div class="cards">
+  <p v-if="onlyLocked && !items.length" class="cards-empty">
+    В этой вкладке всё выполнено
+  </p>
+  <div v-else class="cards">
     <article
       v-for="item in items"
       :key="item.id"
@@ -89,17 +92,39 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  /** Если задано — только эти ID, в этом порядке */
+  ids: {
+    type: Array,
+    default: null,
+  },
 })
 
-const items = computed(() =>
-  buildAchievementItems(props.achievements, props.metaById, {
-    onlyLocked: props.onlyLocked,
+const items = computed(() => {
+  const built = buildAchievementItems(props.achievements, props.metaById, {
+    onlyLocked: false,
     baseUrl: import.meta.env.BASE_URL,
-  }),
-)
+  })
+  if (!props.ids?.length) {
+    return props.onlyLocked ? built.filter((i) => !i.unlocked) : built
+  }
+  const byId = new Map(built.map((item) => [item.id, item]))
+  const out = []
+  for (const id of props.ids) {
+    const item = byId.get(id)
+    if (item) out.push(item)
+  }
+  return props.onlyLocked ? out.filter((i) => !i.unlocked) : out
+})
 </script>
 
 <style scoped>
+.cards-empty {
+  margin: 24px 0;
+  color: #9ca3af;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

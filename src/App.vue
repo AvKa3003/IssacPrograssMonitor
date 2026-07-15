@@ -82,6 +82,107 @@
                     <code>npm run scrape:sheets</code>
                   </p>
                 </n-tab-pane>
+                <n-tab-pane name="char-unlocks" tab="Персонажи">
+                  <div class="stats groups-filters">
+                    <n-checkbox v-model:checked="groupsOnlyLocked">
+                      Только неоткрытые
+                    </n-checkbox>
+                  </div>
+                  <AchievementCards
+                    :achievements="achievements"
+                    :meta-by-id="metaById"
+                    :ids="characterUnlockIds"
+                    :only-locked="groupsOnlyLocked"
+                  />
+                </n-tab-pane>
+                <n-tab-pane name="story-progress" tab="Прогресс прохождения">
+                  <div class="stats groups-filters">
+                    <n-checkbox v-model:checked="groupsOnlyLocked">
+                      Только неоткрытые
+                    </n-checkbox>
+                  </div>
+                  <AchievementCards
+                    :achievements="achievements"
+                    :meta-by-id="metaById"
+                    :ids="storyProgressIds"
+                    :only-locked="groupsOnlyLocked"
+                  />
+                </n-tab-pane>
+                <n-tab-pane name="challenges" tab="Испытания">
+                  <div class="stats groups-filters">
+                    <n-checkbox v-model:checked="groupsOnlyLocked">
+                      Только неоткрытые
+                    </n-checkbox>
+                  </div>
+                  <AchievementCards
+                    :achievements="achievements"
+                    :meta-by-id="metaById"
+                    :ids="challengeIds"
+                    :only-locked="groupsOnlyLocked"
+                  />
+                </n-tab-pane>
+                <n-tab-pane name="misc" tab="Разное">
+                  <div class="stats groups-filters">
+                    <n-checkbox v-model:checked="groupsOnlyLocked">
+                      Только неоткрытые
+                    </n-checkbox>
+                  </div>
+                  <AchievementCards
+                    :achievements="achievements"
+                    :meta-by-id="metaById"
+                    :ids="miscIds"
+                    :only-locked="groupsOnlyLocked"
+                  />
+                </n-tab-pane>
+                <n-tab-pane name="special" tab="Особые условия">
+                  <div class="stats groups-filters">
+                    <n-checkbox v-model:checked="groupsOnlyLocked">
+                      Только неоткрытые
+                    </n-checkbox>
+                  </div>
+                  <AchievementCards
+                    :achievements="achievements"
+                    :meta-by-id="metaById"
+                    :ids="specialConditionIds"
+                    :only-locked="groupsOnlyLocked"
+                  />
+                </n-tab-pane>
+                <n-tab-pane name="donation" tab="Донатные машины">
+                  <div class="stats groups-filters">
+                    <n-checkbox v-model:checked="groupsOnlyLocked">
+                      Только неоткрытые
+                    </n-checkbox>
+                  </div>
+                  <AchievementCards
+                    :achievements="achievements"
+                    :meta-by-id="metaById"
+                    :ids="donationIds"
+                    :only-locked="groupsOnlyLocked"
+                  />
+                </n-tab-pane>
+                <n-tab-pane
+                  name="ungrouped"
+                  :tab="`Вне блоков (${ungroupedIds.length})`"
+                >
+                  <p class="ungrouped-hint">
+                    Достижения, которых ещё нет ни в одном блоке групп
+                    (сейчас — лист персонажей). Номера помогают понять, что
+                    осталось обернуть в UI.
+                  </p>
+                  <p class="ungrouped-stats">
+                    В группах: {{ groupedCount }} · вне блоков:
+                    {{ ungroupedIds.length }} · всего:
+                    {{ achievements.length }}
+                  </p>
+                  <div class="ungrouped-list">
+                    <span
+                      v-for="id in ungroupedIds"
+                      :key="id"
+                      class="ungrouped-id"
+                      :title="metaById[id]?.nameRu || `#${id}`"
+                    >{{ id }}</span>
+                  </div>
+                </n-tab-pane>
               </n-tabs>
             </n-tab-pane>
           </n-tabs>
@@ -100,6 +201,16 @@ import AchievementCards from './components/AchievementCards.vue'
 import CharacterSheets from './components/CharacterSheets.vue'
 import { parseAchievements } from './parseSave.js'
 import { loadSavedProgress, saveProgress, clearSavedProgress } from './saveStore.js'
+import {
+  CHARACTER_UNLOCK_ACHIEVEMENT_IDS,
+  STORY_PROGRESS_ACHIEVEMENT_IDS,
+  CHALLENGE_ACHIEVEMENT_IDS,
+  MISC_ACHIEVEMENT_IDS,
+  SPECIAL_CONDITION_ACHIEVEMENT_IDS,
+  DONATION_ACHIEVEMENT_IDS,
+  collectGroupedAchievementIds,
+  listUngroupedAchievementIds,
+} from './utils/ungroupedAchievements.js'
 
 const fileName = ref('')
 const achievements = ref(null)
@@ -110,6 +221,7 @@ const groupsSection = ref('characters')
 const achievementMeta = ref([])
 const characterSheets = ref([])
 const onlyLocked = ref(false)
+const groupsOnlyLocked = ref(false)
 const viewMode = ref('grid')
 
 const lockedCount = computed(() =>
@@ -125,6 +237,26 @@ const metaById = computed(() => {
   }
   return map
 })
+
+const characterUnlockIds = CHARACTER_UNLOCK_ACHIEVEMENT_IDS
+const storyProgressIds = STORY_PROGRESS_ACHIEVEMENT_IDS
+const challengeIds = CHALLENGE_ACHIEVEMENT_IDS
+const miscIds = MISC_ACHIEVEMENT_IDS
+const specialConditionIds = SPECIAL_CONDITION_ACHIEVEMENT_IDS
+const donationIds = DONATION_ACHIEVEMENT_IDS
+
+const groupedIds = computed(() =>
+  collectGroupedAchievementIds(characterSheets.value),
+)
+
+const groupedCount = computed(() => groupedIds.value.size)
+
+const ungroupedIds = computed(() =>
+  listUngroupedAchievementIds(
+    achievements.value?.length || 0,
+    groupedIds.value,
+  ),
+)
 
 function persist() {
   if (!achievements.value || !fileName.value) return
@@ -236,6 +368,10 @@ async function onFile(file) {
   margin-left: auto;
 }
 
+.groups-filters {
+  margin-bottom: 8px;
+}
+
 .groups-placeholder {
   margin: 24px 0;
   color: #9ca3af;
@@ -248,6 +384,39 @@ async function onFile(file) {
 
 .groups-placeholder code {
   color: #70c0e8;
+}
+
+.ungrouped-hint {
+  margin: 8px 0 12px;
+  color: #9ca3af;
+  font-size: 0.9rem;
+  max-width: 52rem;
+}
+
+.ungrouped-stats {
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+  color: #c8c8c8;
+}
+
+.ungrouped-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ungrouped-id {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.4rem;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: #2a2d33;
+  color: #e8e8e8;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, monospace;
 }
 </style>
 
