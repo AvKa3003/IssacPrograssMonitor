@@ -62,104 +62,95 @@
               />
             </n-tab-pane>
 
-            <n-tab-pane name="groups" tab="По группам">
-              <n-tabs
-                v-model:value="groupsSection"
-                type="line"
-                :animated="false"
-                class="groups-inner-tabs"
-              >
-                <n-tab-pane name="characters" tab="Лист персонажей">
-                  <CharacterSheets
-                    v-if="characterSheets.length"
-                    :sheets="characterSheets"
-                    :achievements="achievements"
-                    :checklist="checklist"
-                    :meta-by-id="metaById"
-                  />
-                  <p v-else class="groups-placeholder">
-                    Нет данных листа. Выполни:
-                    <code>npm run scrape:sheets</code>
-                  </p>
-                </n-tab-pane>
-                <n-tab-pane name="char-unlocks" tab="Персонажи">
-                  <GroupAchievementsPanel
-                    v-model:only-locked="groupsOnlyLocked"
-                    v-model:view-mode="groupsViewMode"
-                    :achievements="achievements"
-                    :meta-by-id="metaById"
-                    :ids="characterUnlockIds"
-                  />
-                </n-tab-pane>
-                <n-tab-pane name="story-progress" tab="Прогресс прохождения">
-                  <GroupAchievementsPanel
-                    v-model:only-locked="groupsOnlyLocked"
-                    v-model:view-mode="groupsViewMode"
-                    :achievements="achievements"
-                    :meta-by-id="metaById"
-                    :ids="storyProgressIds"
-                  />
-                </n-tab-pane>
-                <n-tab-pane name="challenges" tab="Испытания">
-                  <GroupAchievementsPanel
-                    v-model:only-locked="groupsOnlyLocked"
-                    v-model:view-mode="groupsViewMode"
-                    :achievements="achievements"
-                    :meta-by-id="metaById"
-                    :ids="challengeIds"
-                  />
-                </n-tab-pane>
-                <n-tab-pane name="misc" tab="Разное">
-                  <GroupAchievementsPanel
-                    v-model:only-locked="groupsOnlyLocked"
-                    v-model:view-mode="groupsViewMode"
-                    :achievements="achievements"
-                    :meta-by-id="metaById"
-                    :ids="miscIds"
-                  />
-                </n-tab-pane>
-                <n-tab-pane name="special" tab="Особые условия">
-                  <GroupAchievementsPanel
-                    v-model:only-locked="groupsOnlyLocked"
-                    v-model:view-mode="groupsViewMode"
-                    :achievements="achievements"
-                    :meta-by-id="metaById"
-                    :ids="specialConditionIds"
-                  />
-                </n-tab-pane>
-                <n-tab-pane name="donation" tab="Донатные машины">
-                  <GroupAchievementsPanel
-                    v-model:only-locked="groupsOnlyLocked"
-                    v-model:view-mode="groupsViewMode"
-                    :achievements="achievements"
-                    :meta-by-id="metaById"
-                    :ids="donationIds"
-                  />
-                </n-tab-pane>
-                <n-tab-pane
-                  name="ungrouped"
-                  :tab="`Вне блоков (${ungroupedIds.length})`"
-                >
-                  <p class="ungrouped-hint">
-                    Достижения, которых ещё нет ни в одном блоке групп
-                    (сейчас — лист персонажей). Номера помогают понять, что
-                    осталось обернуть в UI.
-                  </p>
-                  <p class="ungrouped-stats">
-                    В группах: {{ groupedCount }} · вне блоков:
-                    {{ ungroupedIds.length }} · всего:
-                    {{ achievements.length }}
-                  </p>
-                  <div class="ungrouped-list">
-                    <span
-                      v-for="id in ungroupedIds"
-                      :key="id"
-                      class="ungrouped-id"
-                      :title="metaById[id]?.nameRu || `#${id}`"
-                    >{{ id }}</span>
-                  </div>
-                </n-tab-pane>
-              </n-tabs>
+            <n-tab-pane name="characters" tab="Лист персонажей">
+              <CharacterSheets
+                v-if="characterSheets.length"
+                :sheets="characterSheets"
+                :achievements="achievements"
+                :checklist="checklist"
+                :meta-by-id="metaById"
+              />
+              <p v-else class="groups-placeholder">
+                Нет данных листа. Выполни:
+                <code>npm run scrape:sheets</code>
+              </p>
+            </n-tab-pane>
+            <n-tab-pane name="char-unlocks" tab="Персонажи">
+              <GroupAchievementsPanel
+                v-model:only-locked="groupsOnlyLocked"
+                v-model:view-mode="groupsViewMode"
+                :achievements="achievements"
+                :meta-by-id="metaById"
+                :ids="characterUnlockIds"
+              />
+            </n-tab-pane>
+            <n-tab-pane name="story-progress" tab="Прогресс прохождения">
+              <GroupAchievementsPanel
+                v-model:only-locked="groupsOnlyLocked"
+                v-model:view-mode="groupsViewMode"
+                :achievements="achievements"
+                :meta-by-id="metaById"
+                :ids="storyProgressIds"
+              />
+            </n-tab-pane>
+            <n-tab-pane name="challenges" tab="Испытания">
+              <GroupAchievementsPanel
+                v-model:only-locked="groupsOnlyLocked"
+                v-model:view-mode="groupsViewMode"
+                :achievements="achievements"
+                :meta-by-id="metaById"
+                :ids="challengeIds"
+              />
+            </n-tab-pane>
+            <n-tab-pane name="misc" tab="Разное">
+              <GroupAchievementsPanel
+                v-model:only-locked="groupsOnlyLocked"
+                v-model:view-mode="groupsViewMode"
+                :achievements="achievements"
+                :meta-by-id="metaById"
+                :ids="miscIds"
+              />
+            </n-tab-pane>
+            <n-tab-pane name="special" tab="Особые условия">
+              <GroupAchievementsPanel
+                v-model:only-locked="groupsOnlyLocked"
+                v-model:view-mode="groupsViewMode"
+                :achievements="achievements"
+                :meta-by-id="metaById"
+                :ids="specialConditionIds"
+              />
+            </n-tab-pane>
+            <n-tab-pane name="donation" tab="Донатные машины">
+              <GroupAchievementsPanel
+                v-model:only-locked="groupsOnlyLocked"
+                v-model:view-mode="groupsViewMode"
+                :achievements="achievements"
+                :meta-by-id="metaById"
+                :ids="donationIds"
+              />
+            </n-tab-pane>
+            <n-tab-pane
+              v-if="sheetsReady && ungroupedIds.length"
+              name="ungrouped"
+              :tab="`Вне блоков (${ungroupedIds.length})`"
+            >
+              <p class="ungrouped-hint">
+                Достижения, которых ещё нет ни в одном блоке групп.
+                Номера помогают понять, что осталось обернуть в UI.
+              </p>
+              <p class="ungrouped-stats">
+                В группах: {{ groupedCount }} · вне блоков:
+                {{ ungroupedIds.length }} · всего:
+                {{ achievements.length }}
+              </p>
+              <div class="ungrouped-list">
+                <span
+                  v-for="id in ungroupedIds"
+                  :key="id"
+                  class="ungrouped-id"
+                  :title="metaById[id]?.nameRu || `#${id}`"
+                >{{ id }}</span>
+              </div>
             </n-tab-pane>
           </n-tabs>
         </template>
@@ -194,9 +185,9 @@ const achievements = ref(null)
 const checklist = ref(null)
 const unlockedCount = ref(0)
 const activeTab = ref('achievements')
-const groupsSection = ref('characters')
 const achievementMeta = ref([])
 const characterSheets = ref([])
+const sheetsReady = ref(false)
 const onlyLocked = ref(false)
 const groupsOnlyLocked = ref(false)
 const viewMode = ref('grid')
@@ -253,6 +244,36 @@ watch([onlyLocked, viewMode], () => {
 })
 
 onMounted(async () => {
+  // Сначала статические данные: иначе при кэше сейва на долю секунды
+  // «Вне блоков» считает лист пустым и раздувается.
+  await Promise.all([
+    (async () => {
+      try {
+        const res = await fetch(`${import.meta.env.BASE_URL}data/achievements.json`)
+        if (res.ok) {
+          const data = await res.json()
+          achievementMeta.value = data.achievements || []
+        }
+      } catch {
+        /* мета ещё не спарсена */
+      }
+    })(),
+    (async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.BASE_URL}data/character-sheets.json`,
+        )
+        if (res.ok) {
+          const data = await res.json()
+          characterSheets.value = data.sheets || []
+        }
+      } catch {
+        /* лист ещё не спарсен */
+      }
+    })(),
+  ])
+  sheetsReady.value = true
+
   const cached = loadSavedProgress()
   if (cached) {
     fileName.value = cached.fileName
@@ -262,26 +283,6 @@ onMounted(async () => {
     onlyLocked.value = cached.onlyLocked
     viewMode.value = cached.viewMode
     activeTab.value = 'achievements'
-  }
-
-  try {
-    const res = await fetch(`${import.meta.env.BASE_URL}data/achievements.json`)
-    if (res.ok) {
-      const data = await res.json()
-      achievementMeta.value = data.achievements || []
-    }
-  } catch {
-    /* мета ещё не спарсена */
-  }
-
-  try {
-    const res = await fetch(`${import.meta.env.BASE_URL}data/character-sheets.json`)
-    if (res.ok) {
-      const data = await res.json()
-      characterSheets.value = data.sheets || []
-    }
-  } catch {
-    /* лист ещё не спарсен */
   }
 })
 
@@ -350,10 +351,6 @@ async function onFile(file) {
   margin: 24px 0;
   color: #9ca3af;
   font-size: 0.95rem;
-}
-
-.groups-inner-tabs {
-  margin-top: 4px;
 }
 
 .groups-placeholder code {

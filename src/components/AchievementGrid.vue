@@ -5,22 +5,26 @@
   <div v-else class="grid-wrap" ref="wrapRef">
     <div
       class="grid"
-      :class="{ 'headers-hidden': onlyLocked }"
+      :class="{ 'headers-hidden': showHeaders && onlyLocked }"
       :style="{
-        gridTemplateColumns: `40px repeat(${COLS}, 90px)`,
+        gridTemplateColumns: showHeaders
+          ? `40px repeat(${COLS}, 90px)`
+          : `repeat(${COLS}, 90px)`,
       }"
     >
-      <div class="corner" />
-      <div
-        v-for="col in COLS"
-        :key="'h' + col"
-        class="col-header"
-      >
-        {{ col }}
-      </div>
+      <template v-if="showHeaders">
+        <div class="corner" />
+        <div
+          v-for="col in COLS"
+          :key="'h' + col"
+          class="col-header"
+        >
+          {{ col }}
+        </div>
+      </template>
 
       <template v-for="(row, rowIndex) in rows" :key="'r' + rowIndex">
-        <div class="row-header">
+        <div v-if="showHeaders" class="row-header">
           {{ row[0] ? row[0].id : rowIndex * COLS + 1 }}
         </div>
         <div
@@ -187,6 +191,9 @@ function buildItems() {
 }
 
 const items = computed(() => buildItems())
+
+/** Номера строк/столбцов только для полного списка, не для групп. */
+const showHeaders = computed(() => !props.ids?.length)
 
 const rows = computed(() => {
   const list = items.value
