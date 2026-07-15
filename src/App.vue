@@ -20,7 +20,11 @@
             :animated="false"
             class="tabs"
           >
-            <n-tab-pane name="achievements" tab="Все достижения">
+            <n-tab-pane
+              name="achievements"
+              tab="Все достижения"
+              display-directive="show"
+            >
               <div class="stats">
                 <n-tag type="success" size="large">
                   {{ unlockedCount }} / {{ achievements.length }}
@@ -62,7 +66,11 @@
               />
             </n-tab-pane>
 
-            <n-tab-pane name="characters" tab="Лист персонажей">
+            <n-tab-pane
+              name="characters"
+              tab="Лист персонажей"
+              display-directive="show"
+            >
               <CharacterSheets
                 v-if="characterSheets.length"
                 :sheets="characterSheets"
@@ -75,16 +83,23 @@
                 <code>npm run scrape:sheets</code>
               </p>
             </n-tab-pane>
-            <n-tab-pane name="char-unlocks" tab="Персонажи">
-              <GroupAchievementsPanel
-                v-model:only-locked="groupsOnlyLocked"
-                v-model:view-mode="groupsViewMode"
+            <n-tab-pane
+              name="char-unlocks"
+              tab="Персонажи"
+              display-directive="show"
+            >
+              <CharacterUnlocks
                 :achievements="achievements"
                 :meta-by-id="metaById"
-                :ids="characterUnlockIds"
+                :sheets="characterSheets"
+                :checklist="checklist"
               />
             </n-tab-pane>
-            <n-tab-pane name="story-progress" tab="Прогресс прохождения">
+            <n-tab-pane
+              name="story-progress"
+              tab="Прогресс прохождения"
+              display-directive="show"
+            >
               <GroupAchievementsPanel
                 v-model:only-locked="groupsOnlyLocked"
                 v-model:view-mode="groupsViewMode"
@@ -93,7 +108,11 @@
                 :ids="storyProgressIds"
               />
             </n-tab-pane>
-            <n-tab-pane name="challenges" tab="Испытания">
+            <n-tab-pane
+              name="challenges"
+              tab="Испытания"
+              display-directive="show"
+            >
               <GroupAchievementsPanel
                 v-model:only-locked="groupsOnlyLocked"
                 v-model:view-mode="groupsViewMode"
@@ -102,7 +121,11 @@
                 :ids="challengeIds"
               />
             </n-tab-pane>
-            <n-tab-pane name="misc" tab="Разное">
+            <n-tab-pane
+              name="misc"
+              tab="Разное"
+              display-directive="show"
+            >
               <GroupAchievementsPanel
                 v-model:only-locked="groupsOnlyLocked"
                 v-model:view-mode="groupsViewMode"
@@ -111,7 +134,11 @@
                 :ids="miscIds"
               />
             </n-tab-pane>
-            <n-tab-pane name="special" tab="Особые условия">
+            <n-tab-pane
+              name="special"
+              tab="Особые условия"
+              display-directive="show"
+            >
               <GroupAchievementsPanel
                 v-model:only-locked="groupsOnlyLocked"
                 v-model:view-mode="groupsViewMode"
@@ -120,7 +147,11 @@
                 :ids="specialConditionIds"
               />
             </n-tab-pane>
-            <n-tab-pane name="donation" tab="Донатные машины">
+            <n-tab-pane
+              name="donation"
+              tab="Донатные машины"
+              display-directive="show"
+            >
               <GroupAchievementsPanel
                 v-model:only-locked="groupsOnlyLocked"
                 v-model:view-mode="groupsViewMode"
@@ -133,6 +164,7 @@
               v-if="sheetsReady && ungroupedIds.length"
               name="ungrouped"
               :tab="`Вне блоков (${ungroupedIds.length})`"
+              display-directive="show"
             >
               <p class="ungrouped-hint">
                 Достижения, которых ещё нет ни в одном блоке групп.
@@ -166,11 +198,11 @@ import FileDropZone from './components/FileDropZone.vue'
 import AchievementGrid from './components/AchievementGrid.vue'
 import AchievementCards from './components/AchievementCards.vue'
 import CharacterSheets from './components/CharacterSheets.vue'
+import CharacterUnlocks from './components/CharacterUnlocks.vue'
 import GroupAchievementsPanel from './components/GroupAchievementsPanel.vue'
 import { parseAchievements } from './parseSave.js'
 import { loadSavedProgress, saveProgress, clearSavedProgress } from './saveStore.js'
 import {
-  CHARACTER_UNLOCK_ACHIEVEMENT_IDS,
   STORY_PROGRESS_ACHIEVEMENT_IDS,
   CHALLENGE_ACHIEVEMENT_IDS,
   MISC_ACHIEVEMENT_IDS,
@@ -207,7 +239,6 @@ const metaById = computed(() => {
   return map
 })
 
-const characterUnlockIds = CHARACTER_UNLOCK_ACHIEVEMENT_IDS
 const storyProgressIds = STORY_PROGRESS_ACHIEVEMENT_IDS
 const challengeIds = CHALLENGE_ACHIEVEMENT_IDS
 const miscIds = MISC_ACHIEVEMENT_IDS

@@ -97,20 +97,37 @@ for (let ci = 0; ci < CHARACTER_COUNT; ci++) {
   )
 }
 
-console.log('\n=== Isaac (0) all mark offsets ===')
-const isaacOffs = getMarkOffsets(sections, 0)
-const isaacMarks = getCharacterMarks(data, sections, 0)
-for (let i = 0; i < 12; i++) {
+console.log(
+  '\n=== mark byte offsets per character (uint16 LE, sections[1]=0x' +
+    s1.toString(16) +
+    ') ===',
+)
+console.log(
+  'mark order: Heart Isaac Satan BossRush ??? Lamb Mega Greed Hush Delirium Mother Beast',
+)
+
+for (let ci = 0; ci < CHARACTER_COUNT; ci++) {
+  const offs = getMarkOffsets(sections, ci)
+  const marks = getCharacterMarks(data, sections, ci)
+  const hex = offs.map((o) => '0x' + o.toString(16).padStart(4, '0')).join(' ')
+  const vals = marks
+    .map((v) => (v === 0 ? '.' : v === 1 ? 'n' : v === 2 ? 'H' : String(v)))
+    .join('')
   console.log(
-    `  ${MARKS[i].padEnd(14)} @ 0x${isaacOffs[i].toString(16).padStart(4, '0')} = ${isaacMarks[i]}`,
+    `${String(ci).padStart(2)} ${CHARS[ci].padEnd(14)} ${vals}  ${hex}`,
   )
 }
 
-console.log('\n=== T. Isaac (17) all mark offsets ===')
-const tiOffs = getMarkOffsets(sections, 17)
-const tiMarks = getCharacterMarks(data, sections, 17)
-for (let i = 0; i < 12; i++) {
-  console.log(
-    `  ${MARKS[i].padEnd(14)} @ 0x${tiOffs[i].toString(16).padStart(4, '0')} = ${tiMarks[i]}`,
-  )
+console.log('\n=== mark offsets detailed (name @ addr = value) ===')
+for (let ci = 0; ci < CHARACTER_COUNT; ci++) {
+  const offs = getMarkOffsets(sections, ci)
+  const marks = getCharacterMarks(data, sections, ci)
+  console.log(`\n${String(ci).padStart(2)} ${CHARS[ci]}`)
+  for (let i = 0; i < 12; i++) {
+    console.log(
+      `  ${String(i).padStart(2)} ${MARKS[i].padEnd(14)} @ 0x${offs[i]
+        .toString(16)
+        .padStart(4, '0')} = ${marks[i]}`,
+    )
+  }
 }

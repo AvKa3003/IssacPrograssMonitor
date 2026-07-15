@@ -218,76 +218,106 @@
 
     <Teleport to="body">
       <div
-        v-if="activeCell && popupMeta"
+        v-for="win in openWindows"
+        :key="win.key"
+        :ref="(el) => setPopupEl(win.key, el)"
         class="sheet-popup"
-        :class="{ pinned: !!pinnedId }"
-        :style="popupStyle"
+        :class="{
+          pinned: win.pinned,
+          ready: win.ready,
+          detached: win.detached,
+          ephemeral: win.ephemeral,
+        }"
+        :style="styleFor(win)"
+        @mouseenter="onPopupEnter(win.key)"
+        @mouseleave="onPopupLeave(win.key)"
         @click.stop
       >
-        <div class="popup-header">
-          <span class="popup-id">#{{ activeCell.achievementId }}</span>
-          <n-tag
-            size="small"
-            :type="markStatusTag(activeSheet).type"
-          >
-            {{ markStatusTag(activeSheet).label }}
-          </n-tag>
-        </div>
-        <div class="popup-body">
-          <component
-            :is="popupUnlockUrl ? 'a' : 'div'"
-            class="popup-icon-wrap"
-            :href="popupUnlockUrl || undefined"
-            :target="popupUnlockUrl ? '_blank' : undefined"
-            :rel="popupUnlockUrl ? 'noopener noreferrer' : undefined"
-            :title="popupUnlockTitle || undefined"
-          >
-            <img
-              v-if="popupMeta.icon"
-              class="popup-icon"
-              :src="`${base}${popupMeta.icon}`"
-              :alt="popupMeta.nameRu || ''"
-            />
-            <span v-else class="popup-icon-fallback">#{{ activeCell.achievementId }}</span>
-          </component>
-          <div class="popup-info">
-            <div class="name-ru">{{ popupMeta.nameRu }}</div>
-            <div v-if="popupMeta.nameEn" class="name-en">{{ popupMeta.nameEn }}</div>
-            <div
-              v-if="popupUnlockTitle || popupUnlockUrl"
-              class="meta-row"
+        <PopupDragBar
+          :show-close="win.detached"
+          :interactive="win.pinned"
+          :dragging="draggingKey === win.key"
+          @dragstart="(e) => onDragStart(win.key, e)"
+          @close="closeWindow(win.key)"
+        />
+        <template v-if="cellFor(win) && metaFor(win)">
+          <div class="popup-header">
+            <span class="popup-id">#{{ achievementIdFor(win) }}</span>
+            <n-tag
+              size="small"
+              :type="statusForWin(win).type"
             >
-              <span class="label">Открывает</span>
-              <a
-                v-if="popupUnlockUrl"
-                :href="popupUnlockUrl"
-                target="_blank"
-                rel="noopener noreferrer"
+              {{ statusForWin(win).label }}
+            </n-tag>
+            <span
+              class="pin-hint"
+              :class="{ visible: win.pinned && !win.detached }"
+            >
+              закреплено · уведи курсор / Esc
+            </span>
+          </div>
+          <div class="popup-body">
+            <component
+              :is="unlockUrlFor(win) ? 'a' : 'div'"
+              class="popup-icon-wrap"
+              :href="unlockUrlFor(win) || undefined"
+              :target="unlockUrlFor(win) ? '_blank' : undefined"
+              :rel="unlockUrlFor(win) ? 'noopener noreferrer' : undefined"
+              :title="unlockTitleFor(win) || undefined"
+            >
+              <img
+                v-if="metaFor(win).icon"
+                class="popup-icon"
+                :src="`${base}${metaFor(win).icon}`"
+                :alt="metaFor(win).nameRu || ''"
+              />
+              <span v-else class="popup-icon-fallback">
+                #{{ achievementIdFor(win) }}
+              </span>
+            </component>
+            <div class="popup-info">
+              <div class="name-ru">{{ metaFor(win).nameRu }}</div>
+              <div v-if="metaFor(win).nameEn" class="name-en">
+                {{ metaFor(win).nameEn }}
+              </div>
+              <div
+                v-if="unlockTitleFor(win) || unlockUrlFor(win)"
+                class="meta-row"
               >
-                {{ popupUnlockTitle || popupUnlockUrl }}
-              </a>
-              <span v-else>{{ popupUnlockTitle }}</span>
+                <span class="label">Открывает</span>
+                <a
+                  v-if="unlockUrlFor(win)"
+                  :href="unlockUrlFor(win)"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{ unlockTitleFor(win) || unlockUrlFor(win) }}
+                </a>
+                <span v-else>{{ unlockTitleFor(win) }}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          v-if="popupMeta.conditionHtmlRu || popupMeta.conditionRu"
-          class="popup-condition"
-        >
-          <div class="label">Как получить</div>
           <div
-            v-if="popupMeta.conditionHtmlRu"
-            v-html="allowFandomImages(popupMeta.conditionHtmlRu)"
-          />
-          <div v-else>{{ popupMeta.conditionRu }}</div>
-        </div>
+            v-if="metaFor(win).conditionHtmlRu || metaFor(win).conditionRu"
+            class="popup-condition"
+          >
+            <div class="label">Как получить</div>
+            <div
+              v-if="metaFor(win).conditionHtmlRu"
+              v-html="allowFandomImages(metaFor(win).conditionHtmlRu)"
+            />
+            <div v-else>{{ metaFor(win).conditionRu }}</div>
+          </div>
+        </template>
       </div>
     </Teleport>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import PopupDragBar from './PopupDragBar.vue'
+import { useAnchoredPopup } from '../composables/useAnchoredPopup.js'
 import { allowFandomImages } from '../utils/achievements.js'
 import {
   CHAR_INDEX_BY_NAME,
@@ -324,62 +354,76 @@ const props = defineProps({
 
 const base = import.meta.env.BASE_URL
 const activeSheet = ref(props.sheets[0]?.id || 'normal')
-const hoveredId = ref(null)
-const pinnedId = ref(null)
 const hoverRowKey = ref(null)
-const pinnedRowKey = ref(null)
-const anchorRect = ref(null)
 
-const activeId = computed(() => pinnedId.value || hoveredId.value)
-const activeRowKey = computed(() => pinnedRowKey.value || hoverRowKey.value)
+const {
+  openWindows,
+  draggingKey,
+  setPopupEl,
+  styleFor,
+  onAnchorEnter,
+  onAnchorLeave,
+  onAnchorClick,
+  onPopupEnter,
+  onPopupLeave,
+  onDragStart,
+  closeWindow,
+  clearAll,
+  isPinnedKey,
+} = useAnchoredPopup({
+  width: 320,
+})
+
+function achievementIdFor(win) {
+  const id = Number(String(win.key).split('::')[0])
+  return Number.isFinite(id) ? id : null
+}
 
 const marksProgress = computed(() => countMarksProgress(props.checklist))
 
-const activeCell = computed(() => {
-  if (!activeId.value) return null
+function rowKeyForWin(win) {
+  return String(win.key).split('::').slice(1).join('::') || null
+}
+
+function contextFor(win) {
+  const achievementId = achievementIdFor(win)
+  const targetRowKey = rowKeyForWin(win)
+  if (!achievementId || !targetRowKey) return null
   for (const sheet of props.sheets) {
     for (const row of sheet.rows) {
-      for (const cell of row.milestones) {
-        if (cell.achievementId === activeId.value) return cell
-      }
+      if (rowKey(sheet.id, row) !== targetRowKey) continue
+      const cell = row.milestones.find(
+        (candidate) => candidate.achievementId === achievementId,
+      )
+      if (cell) return { sheet, row, cell }
     }
   }
   return null
-})
+}
 
-const popupMeta = computed(() =>
-  activeId.value ? props.metaById[activeId.value] || null : null,
-)
+function cellFor(win) {
+  return contextFor(win)?.cell || null
+}
 
-const popupUnlockUrl = computed(() => {
-  const m = popupMeta.value
-  if (!m) return null
-  return m.unlockUrlRu || m.unlockUrlEn || null
-})
+function metaFor(win) {
+  const achievementId = achievementIdFor(win)
+  return achievementId ? props.metaById[achievementId] || null : null
+}
 
-const popupUnlockTitle = computed(() => {
-  const m = popupMeta.value
-  if (!m) return null
-  return m.unlockTitleRu || m.unlockTitleEn || null
-})
+function unlockUrlFor(win) {
+  const meta = metaFor(win)
+  return meta?.unlockUrlRu || meta?.unlockUrlEn || null
+}
 
-const popupStyle = computed(() => {
-  const r = anchorRect.value
-  if (!r) return { display: 'none' }
-  const width = 300
-  const left = Math.min(
-    Math.max(8, r.right + 8),
-    window.innerWidth - width - 8,
-  )
-  const top = Math.min(Math.max(8, r.top), window.innerHeight - 200)
-  return {
-    position: 'fixed',
-    left: `${left}px`,
-    top: `${top}px`,
-    width: `${width}px`,
-    zIndex: 4000,
-  }
-})
+function unlockTitleFor(win) {
+  const meta = metaFor(win)
+  return meta?.unlockTitleRu || meta?.unlockTitleEn || null
+}
+
+function cellPopupKey(cell, event) {
+  const rk = event.currentTarget?.dataset?.rowKey || ''
+  return `${cell.achievementId}::${rk}`
+}
 
 function charMarks(row) {
   if (!props.checklist || row.character.kind === 'summary') return null
@@ -508,7 +552,14 @@ function markCellClass(sheet, row, cell) {
   const unlocked = cellUnlockMet(sheet, row, cell)
   const frame =
     level === 'hard' ? 'yes-full' : level === 'normal' ? 'yes-half' : 'no'
-  return [frame, unlocked ? 'unlocked' : 'locked'].join(' ')
+  return {
+    [frame]: true,
+    unlocked,
+    locked: !unlocked,
+    pinned: isPinnedKey(
+      `${cell.achievementId}::${rowKey(sheet.id, row)}`,
+    ),
+  }
 }
 
 function cellIcon(cell) {
@@ -522,14 +573,10 @@ function rowKey(sheetId, row) {
   return `${sheetId}:${row.character.nameRu || 'x'}`
 }
 
-function markStatusTag(sheetId) {
-  const cell = activeCell.value
-  if (!cell) return { type: 'default', label: '—' }
-  const sheet = props.sheets.find((s) => s.id === (sheetId || activeSheet.value))
-  const row = sheet?.rows.find(
-    (r) => rowKey(sheet.id, r) === activeRowKey.value,
-  )
-  if (!row) return { type: 'error', label: 'Не пройдено' }
+function statusForWin(win) {
+  const context = contextFor(win)
+  if (!context) return { type: 'default', label: '—' }
+  const { sheet, row, cell } = context
   const level = cellLevel(sheet, row, cell)
   const spec =
     row.character.kind === 'summary'
@@ -557,48 +604,30 @@ function statusTagFor(level, spec) {
 }
 
 function onEnter(cell, event) {
-  if (cell.empty || !cell.achievementId || pinnedId.value) return
-  hoveredId.value = cell.achievementId
-  hoverRowKey.value = event.currentTarget.dataset.rowKey || null
-  anchorRect.value = event.currentTarget.getBoundingClientRect()
+  if (cell.empty || !cell.achievementId) return
+  const rk = event.currentTarget.dataset.rowKey || null
+  hoverRowKey.value = rk
+  onAnchorEnter(cellPopupKey(cell, event), event)
 }
 
 function onLeave() {
-  if (pinnedId.value) return
-  hoveredId.value = null
+  onAnchorLeave()
   hoverRowKey.value = null
-  anchorRect.value = null
 }
 
 function onClick(cell, event) {
   if (cell.empty || !cell.achievementId) return
-  const rowKeyVal = event.currentTarget.dataset.rowKey || null
-  if (pinnedId.value === cell.achievementId && pinnedRowKey.value === rowKeyVal) {
-    pinnedId.value = null
-    pinnedRowKey.value = null
-    hoveredId.value = cell.achievementId
-    hoverRowKey.value = rowKeyVal
-    anchorRect.value = event.currentTarget.getBoundingClientRect()
-    return
+  const rk = event.currentTarget.dataset.rowKey || null
+  const key = cellPopupKey(cell, event)
+  const result = onAnchorClick(key, event)
+  if (result === 'pinned') {
+    hoverRowKey.value = null
+  } else if (result === 'unpinned') {
+    hoverRowKey.value = rk
   }
-  pinnedId.value = cell.achievementId
-  pinnedRowKey.value = rowKeyVal
-  hoveredId.value = null
-  hoverRowKey.value = null
-  anchorRect.value = event.currentTarget.getBoundingClientRect()
 }
 
-function onDocClick() {
-  if (!pinnedId.value) return
-  pinnedId.value = null
-  pinnedRowKey.value = null
-  hoveredId.value = null
-  hoverRowKey.value = null
-  anchorRect.value = null
-}
-
-onMounted(() => document.addEventListener('click', onDocClick))
-onUnmounted(() => document.removeEventListener('click', onDocClick))
+watch(activeSheet, () => clearAll())
 </script>
 
 <style scoped>
@@ -727,6 +756,13 @@ a.head-label:hover {
   display: inline-flex;
   text-decoration: none;
   line-height: 0;
+  cursor: default;
+}
+
+.milestone-head a.icon-link {
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
 }
 
 .milestone-head a.icon-link:hover {
@@ -799,8 +835,10 @@ a.head-label:hover {
 .tick-cell.yes-half {
   border: 2px solid transparent;
   background:
-    linear-gradient(#1a3d2e, #1a3d2e) padding-box,
-    linear-gradient(to right, #63e2b7 50%, #e88080 50%) border-box;
+    linear-gradient(45deg, #1a3d2e 50%, #3d1a1a 50%) padding-box,
+    linear-gradient(45deg, #63e2b7 50%, #e88080 50%) border-box;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
 }
 
 .mark-cell.yes-half .tick-glyph,
@@ -859,6 +897,8 @@ a.head-label:hover {
 <style>
 .sheet-popup {
   box-sizing: border-box;
+  overflow: auto;
+  overflow-x: hidden;
   padding: 12px;
   border-radius: 10px;
   background: #2a2d33;
@@ -867,11 +907,24 @@ a.head-label:hover {
   font-size: 0.875rem;
   pointer-events: none;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  max-width: min(320px, calc(100vw - 16px));
+  max-height: min(var(--popup-max-h, 100dvh), calc(100dvh - 16px));
+  user-select: none;
+}
+
+.sheet-popup.ready {
+  opacity: 1;
 }
 
 .sheet-popup.pinned {
   pointer-events: auto;
   border-color: #63e2b7;
+  user-select: text;
+}
+
+.sheet-popup.ephemeral .popup-drag-bar {
+  pointer-events: none;
 }
 
 .sheet-popup .popup-header {
@@ -879,6 +932,18 @@ a.head-label:hover {
   gap: 8px;
   align-items: center;
   margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.sheet-popup .pin-hint {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: #9ca3af;
+  visibility: hidden;
+}
+
+.sheet-popup .pin-hint.visible {
+  visibility: visible;
 }
 
 .sheet-popup .popup-id {

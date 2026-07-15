@@ -69,6 +69,34 @@ export function countMarksProgress(checklist) {
   }
 }
 
+/**
+ * Персонаж полностью пройден на хардмоде (все 12 меток hard).
+ * @param {number[] | null | undefined} marks
+ */
+export function isCharacterFullyHardComplete(marks) {
+  if (!marks || marks.length < MARKS_PER_CHARACTER) return false
+  for (let m = 0; m < MARKS_PER_CHARACTER; m++) {
+    if (!isHard(marks[m])) return false
+  }
+  return true
+}
+
+/**
+ * Сколько персонажей (обычные + порченые) полностью закрыты на харде.
+ * @param {number[][] | null} checklist
+ * @returns {{ done: number, total: number }}
+ */
+export function countFullyCompletedCharacters(checklist) {
+  const total = NORMAL_CHARACTER_COUNT + TAINTED_CHARACTER_COUNT
+  let done = 0
+  if (checklist) {
+    for (let c = 0; c < total; c++) {
+      if (isCharacterFullyHardComplete(checklist[c])) done++
+    }
+  }
+  return { done, total }
+}
+
 /** @returns {MarkLevel} */
 export function markLevel(raw) {
   const s = soloLevel(raw)

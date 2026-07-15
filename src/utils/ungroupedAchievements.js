@@ -1,11 +1,41 @@
 /**
  * Анлоки персонажей (вкладка «Персонажи»).
  * 474–490 — порченые (в т.ч. #483 Порченый Эдем / «Непостоянный»).
+ * Порядок = зеркальные пары обычный ↔ порченый (Исаак без ачивки).
  */
 export const CHARACTER_UNLOCK_ACHIEVEMENT_IDS = [
   1, 2, 3, 32, 42, 67, 79, 80, 81, 82, 199, 251, 340, 390, 404, 405,
   474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487,
   488, 489, 490,
+]
+
+/** ID анлока порченого, если в листе персонажей записан неверно */
+export const TAINTED_UNLOCK_ID_BY_NAME = {
+  'Порченый Эдем': 483,
+}
+
+/**
+ * Зеркальные пары для меню персонажей.
+ * normalAchId === null → персонаж доступен сразу (Исаак).
+ */
+export const CHARACTER_UNLOCK_PAIRS = [
+  { key: 'isaac', normalAchId: null, taintedAchId: 474 },
+  { key: 'magdalene', normalAchId: 1, taintedAchId: 475 },
+  { key: 'cain', normalAchId: 2, taintedAchId: 476 },
+  { key: 'judas', normalAchId: 3, taintedAchId: 477 },
+  { key: 'bluebaby', normalAchId: 32, taintedAchId: 478 },
+  { key: 'eve', normalAchId: 42, taintedAchId: 479 },
+  { key: 'samson', normalAchId: 67, taintedAchId: 480 },
+  { key: 'azazel', normalAchId: 79, taintedAchId: 481 },
+  { key: 'lazarus', normalAchId: 80, taintedAchId: 482 },
+  { key: 'eden', normalAchId: 81, taintedAchId: 483 },
+  { key: 'lost', normalAchId: 82, taintedAchId: 484 },
+  { key: 'lilith', normalAchId: 199, taintedAchId: 485 },
+  { key: 'keeper', normalAchId: 251, taintedAchId: 486 },
+  { key: 'apollyon', normalAchId: 340, taintedAchId: 487 },
+  { key: 'forgotten', normalAchId: 390, taintedAchId: 488 },
+  { key: 'bethany', normalAchId: 404, taintedAchId: 489 },
+  { key: 'jacob', normalAchId: 405, taintedAchId: 490 },
 ]
 
 /**

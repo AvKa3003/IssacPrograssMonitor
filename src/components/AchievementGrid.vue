@@ -2,7 +2,7 @@
   <p v-if="showEmpty" class="grid-empty">
     В этой вкладке всё выполнено
   </p>
-  <div v-else class="grid-wrap" ref="wrapRef">
+  <div v-else class="grid-wrap">
     <div
       class="grid"
       :class="{ 'headers-hidden': showHeaders && onlyLocked }"
@@ -54,94 +54,126 @@
 
     <Teleport to="body">
       <div
-        v-if="activeCell"
-        ref="popupRef"
+        v-for="win in openWindows"
+        :key="win.key"
+        :ref="(el) => setPopupEl(win.key, el)"
         class="popup"
-        :class="{ pinned: !!pinnedId }"
-        :style="popupStyle"
-        @mouseenter="onPopupEnter"
-        @mouseleave="onPopupLeave"
+        :class="{
+          pinned: win.pinned,
+          ready: win.ready,
+          detached: win.detached,
+          ephemeral: win.ephemeral,
+        }"
+        :style="styleFor(win)"
+        @mouseenter="onPopupEnter(win.key)"
+        @mouseleave="onPopupLeave(win.key)"
         @click.stop
       >
-        <div class="popup-header">
-          <span class="popup-id">#{{ activeCell.id }}</span>
-          <n-tag
-            size="small"
-            :type="activeCell.unlocked ? 'success' : 'error'"
-          >
-            {{ activeCell.unlocked ? 'Открыто' : 'Закрыто' }}
-          </n-tag>
-          <span v-if="pinnedId" class="pin-hint">закреплено · Esc / клик вне</span>
-        </div>
-
-        <div class="popup-body">
-          <component
-            :is="activeCell.unlockUrl ? 'a' : 'div'"
-            class="popup-icon-wrap"
-            :href="activeCell.unlockUrl || undefined"
-            :target="activeCell.unlockUrl ? '_blank' : undefined"
-            :rel="activeCell.unlockUrl ? 'noopener noreferrer' : undefined"
-            :title="activeCell.unlockTitle || undefined"
-          >
-            <img
-              v-if="activeCell.icon"
-              class="popup-icon"
-              :src="activeCell.icon"
-              :alt="activeCell.nameRu || `#${activeCell.id}`"
-            />
-            <span v-else class="popup-icon-fallback">{{ activeCell.id }}</span>
-          </component>
-
-          <div class="popup-info">
-            <div v-if="activeCell.nameRu" class="name-ru">
-              {{ activeCell.nameRu }}
-            </div>
-            <div v-if="activeCell.nameEn" class="name-en">
-              {{ activeCell.nameEn }}
-            </div>
-            <div
-              v-if="activeCell.unlockTitle || activeCell.unlockUrl"
-              class="meta-row"
+        <PopupDragBar
+          :show-close="win.detached"
+          :interactive="win.pinned"
+          :dragging="draggingKey === win.key"
+          @dragstart="(e) => onDragStart(win.key, e)"
+          @close="closeWindow(win.key)"
+        />
+        <template v-if="flatById[win.key]">
+          <div class="popup-header">
+            <span class="popup-id">#{{ flatById[win.key].id }}</span>
+            <n-tag
+              size="small"
+              :type="flatById[win.key].unlocked ? 'success' : 'error'"
             >
-              <span class="label">Открывает</span>
-              <a
-                v-if="activeCell.unlockUrl"
-                :href="activeCell.unlockUrl"
-                target="_blank"
-                rel="noopener noreferrer"
+              {{ flatById[win.key].unlocked ? 'Открыто' : 'Закрыто' }}
+            </n-tag>
+            <span
+              class="pin-hint"
+              :class="{ visible: win.pinned && !win.detached }"
+            >
+              закреплено · уведи курсор / Esc
+            </span>
+          </div>
+
+          <div class="popup-body">
+            <component
+              :is="flatById[win.key].unlockUrl ? 'a' : 'div'"
+              class="popup-icon-wrap"
+              :href="flatById[win.key].unlockUrl || undefined"
+              :target="flatById[win.key].unlockUrl ? '_blank' : undefined"
+              :rel="
+                flatById[win.key].unlockUrl ? 'noopener noreferrer' : undefined
+              "
+              :title="flatById[win.key].unlockTitle || undefined"
+            >
+              <img
+                v-if="flatById[win.key].icon"
+                class="popup-icon"
+                :src="flatById[win.key].icon"
+                :alt="flatById[win.key].nameRu || `#${flatById[win.key].id}`"
+              />
+              <span v-else class="popup-icon-fallback">
+                {{ flatById[win.key].id }}
+              </span>
+            </component>
+
+            <div class="popup-info">
+              <div v-if="flatById[win.key].nameRu" class="name-ru">
+                {{ flatById[win.key].nameRu }}
+              </div>
+              <div v-if="flatById[win.key].nameEn" class="name-en">
+                {{ flatById[win.key].nameEn }}
+              </div>
+              <div
+                v-if="
+                  flatById[win.key].unlockTitle || flatById[win.key].unlockUrl
+                "
+                class="meta-row"
               >
-                {{ activeCell.unlockTitle || activeCell.unlockUrl }}
-              </a>
-              <span v-else>{{ activeCell.unlockTitle }}</span>
+                <span class="label">Открывает</span>
+                <a
+                  v-if="flatById[win.key].unlockUrl"
+                  :href="flatById[win.key].unlockUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{
+                    flatById[win.key].unlockTitle ||
+                    flatById[win.key].unlockUrl
+                  }}
+                </a>
+                <span v-else>{{ flatById[win.key].unlockTitle }}</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div v-if="activeCell.conditionHtml || activeCell.condition" class="popup-condition">
-          <div class="label">Как получить</div>
           <div
-            v-if="activeCell.conditionHtml"
-            class="condition-html"
-            v-html="activeCell.conditionHtml"
-          />
-          <div v-else class="condition-text">
-            {{ activeCell.condition }}
+            v-if="
+              flatById[win.key].conditionHtml || flatById[win.key].condition
+            "
+            class="popup-condition"
+          >
+            <div class="label">Как получить</div>
+            <div
+              v-if="flatById[win.key].conditionHtml"
+              class="condition-html"
+              v-html="flatById[win.key].conditionHtml"
+            />
+            <div v-else class="condition-text">
+              {{ flatById[win.key].condition }}
+            </div>
           </div>
-        </div>
+        </template>
       </div>
     </Teleport>
   </div>
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
+import PopupDragBar from './PopupDragBar.vue'
+import { useAnchoredPopup } from '../composables/useAnchoredPopup.js'
 import { buildAchievementItems } from '../utils/achievements.js'
 
 const COLS = 10
-const HIDE_DELAY_MS = 120
-const MARGIN = 8
-const GAP = 8
-const POPUP_WIDTH = 320
 
 const props = defineProps({
   achievements: {
@@ -163,15 +195,25 @@ const props = defineProps({
   },
 })
 
-const wrapRef = ref(null)
-const popupRef = ref(null)
-const hoveredId = ref(null)
-const pinnedId = ref(null)
-const anchorRect = ref(null)
-const overPopup = ref(false)
-const popupPos = ref({ left: 0, top: 0, width: POPUP_WIDTH, maxHeight: null })
-let hideTimer = null
-let placeRaf = 0
+const {
+  openWindows,
+  openKeys,
+  hoverKey,
+  draggingKey,
+  setPopupEl,
+  styleFor,
+  onAnchorEnter,
+  onAnchorLeave,
+  onAnchorClick,
+  onPopupEnter,
+  onPopupLeave,
+  onDragStart,
+  closeWindow,
+  clearAll,
+  isPinnedKey,
+} = useAnchoredPopup({
+  width: 320,
+})
 
 function buildItems() {
   const built = buildAchievementItems(props.achievements, props.metaById, {
@@ -212,11 +254,7 @@ const showEmpty = computed(
 
 watch(
   () => props.onlyLocked,
-  () => {
-    pinnedId.value = null
-    hoveredId.value = null
-    anchorRect.value = null
-  },
+  () => clearAll(),
 )
 
 const flatById = computed(() => {
@@ -229,186 +267,30 @@ const flatById = computed(() => {
   return map
 })
 
-const activeId = computed(() => pinnedId.value || hoveredId.value)
-const activeCell = computed(() =>
-  activeId.value ? flatById.value[activeId.value] || null : null,
-)
-
-const popupStyle = computed(() => {
-  if (!anchorRect.value || !activeCell.value) return { display: 'none' }
-  const { left, top, width, maxHeight } = popupPos.value
-  return {
-    position: 'fixed',
-    left: `${left}px`,
-    top: `${top}px`,
-    width: `${width}px`,
-    maxHeight: maxHeight != null ? `${maxHeight}px` : undefined,
-    zIndex: 4000,
-  }
-})
-
-function clamp(value, min, max) {
-  return Math.min(max, Math.max(min, value))
-}
-
-/** Ставит попап рядом с ячейкой и примагничивает к краям экрана */
-function placePopup() {
-  const r = anchorRect.value
-  const el = popupRef.value
-  if (!r || !el) return
-
-  const vw = window.innerWidth
-  const vh = window.innerHeight
-  const width = Math.min(POPUP_WIDTH, vw - MARGIN * 2)
-  const maxHeight = vh - MARGIN * 2
-
-  // сначала ограничиваем высоту, потом меряем реальную
-  el.style.maxHeight = `${maxHeight}px`
-  el.style.width = `${width}px`
-
-  const height = el.offsetHeight
-
-  // Горизонталь: справа от ячейки → слева → прижать к краю
-  let left = r.right + GAP
-  if (left + width > vw - MARGIN) {
-    left = r.left - width - GAP
-  }
-  left = clamp(left, MARGIN, vw - MARGIN - width)
-
-  // Вертикаль: верх ячейки, затем магнит к верху/низу экрана
-  let top = r.top
-  if (top + height > vh - MARGIN) {
-    top = vh - MARGIN - height
-  }
-  top = clamp(top, MARGIN, vh - MARGIN - height)
-
-  popupPos.value = { left, top, width, maxHeight }
-}
-
-function schedulePlace() {
-  cancelAnimationFrame(placeRaf)
-  placeRaf = requestAnimationFrame(() => {
-    nextTick(() => placePopup())
-  })
-}
-
-watch([activeId, anchorRect], () => {
-  if (activeId.value && anchorRect.value) schedulePlace()
-})
-
 function cellClass(cell) {
   if (!cell) return 'empty'
   return {
     yes: cell.unlocked,
     no: !cell.unlocked,
-    active: activeId.value === cell.id,
-    pinned: pinnedId.value === cell.id,
+    active: openKeys.value.includes(cell.id) || hoverKey.value === cell.id,
+    pinned: isPinnedKey(cell.id),
   }
-}
-
-function clearHideTimer() {
-  if (hideTimer) {
-    clearTimeout(hideTimer)
-    hideTimer = null
-  }
-}
-
-function scheduleHide() {
-  clearHideTimer()
-  hideTimer = setTimeout(() => {
-    if (pinnedId.value || overPopup.value) return
-    hoveredId.value = null
-    if (!pinnedId.value) anchorRect.value = null
-  }, HIDE_DELAY_MS)
-}
-
-function setAnchorFromEvent(event) {
-  const el = event.currentTarget
-  if (!el) return
-  anchorRect.value = el.getBoundingClientRect()
 }
 
 function onCellEnter(cell, event) {
   if (!cell) return
-  clearHideTimer()
-  if (pinnedId.value) return
-  hoveredId.value = cell.id
-  setAnchorFromEvent(event)
+  onAnchorEnter(cell.id, event)
 }
 
 function onCellLeave() {
-  if (pinnedId.value) return
-  scheduleHide()
-}
-
-function onPopupEnter() {
-  clearHideTimer()
-  overPopup.value = true
-}
-
-function onPopupLeave() {
-  overPopup.value = false
-  if (pinnedId.value) return
-  scheduleHide()
+  onAnchorLeave()
 }
 
 function onCellClick(cell, event) {
   if (!cell) return
-  clearHideTimer()
-  if (pinnedId.value === cell.id) {
-    pinnedId.value = null
-    hoveredId.value = cell.id
-    setAnchorFromEvent(event)
-    return
-  }
-  pinnedId.value = cell.id
-  hoveredId.value = null
-  setAnchorFromEvent(event)
+  onAnchorClick(cell.id, event)
 }
 
-function onDocClick(event) {
-  if (!pinnedId.value) return
-  const popup = popupRef.value
-  if (popup && popup.contains(event.target)) return
-  const cell = event.target.closest?.('.cell[data-id]')
-  if (cell && Number(cell.dataset.id) === pinnedId.value) return
-  pinnedId.value = null
-  hoveredId.value = null
-  anchorRect.value = null
-}
-
-function onKeydown(event) {
-  if (event.key === 'Escape' && pinnedId.value) {
-    pinnedId.value = null
-    hoveredId.value = null
-    anchorRect.value = null
-  }
-}
-
-function onScrollOrResize() {
-  if (!activeId.value) return
-  const el = wrapRef.value?.querySelector(`.cell[data-id="${activeId.value}"]`)
-  if (el) {
-    anchorRect.value = el.getBoundingClientRect()
-    schedulePlace()
-  }
-}
-
-onMounted(() => {
-  document.addEventListener('click', onDocClick)
-  document.addEventListener('keydown', onKeydown)
-  window.addEventListener('scroll', onScrollOrResize, true)
-  window.addEventListener('resize', onScrollOrResize)
-})
-
-onUnmounted(() => {
-  clearHideTimer()
-  cancelAnimationFrame(placeRaf)
-  document.removeEventListener('click', onDocClick)
-  document.removeEventListener('keydown', onKeydown)
-  window.removeEventListener('scroll', onScrollOrResize, true)
-  window.removeEventListener('resize', onScrollOrResize)
-})
 </script>
 
 <style scoped>
@@ -534,6 +416,7 @@ onUnmounted(() => {
 .popup {
   box-sizing: border-box;
   overflow: auto;
+  overflow-x: hidden;
   padding: 12px;
   border-radius: 10px;
   background: #2a2d33;
@@ -543,11 +426,22 @@ onUnmounted(() => {
   font-size: 0.875rem;
   line-height: 1.4;
   pointer-events: none;
+  opacity: 0;
+  max-width: min(320px, calc(100vw - 16px));
+  max-height: min(var(--popup-max-h, 100dvh), calc(100dvh - 16px));
+}
+
+.popup.ready {
+  opacity: 1;
 }
 
 .popup.pinned {
   border-color: #63e2b7;
   pointer-events: auto;
+}
+
+.popup.ephemeral .popup-drag-bar {
+  pointer-events: none;
 }
 
 .popup-header {
@@ -567,6 +461,11 @@ onUnmounted(() => {
   margin-left: auto;
   font-size: 0.7rem;
   color: #9ca3af;
+  visibility: hidden;
+}
+
+.pin-hint.visible {
+  visibility: visible;
 }
 
 .popup-body {

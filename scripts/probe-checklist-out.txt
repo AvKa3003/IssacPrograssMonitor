@@ -2,83 +2,559 @@ file: D:\Coding\issacProgress\rep+persistentgamedata1.dat
 size: 12100
 header: ISAACNGSAVE09R  
 
-=== sections ===
-  [#0] count=642 start=0x20 (32)
-  [#1] count=523 start=0x2ae (686)
-  [#2] count=14 start=0xae6 (2790)
-  [#3] count=733 start=0xb2a (2858)
-  [#4] count=7 start=0xe13 (3603)
-  [#5] count=104 start=0xe26 (3622)
-  [#6] count=46 start=0xe9a (3738)
-  [#7] count=27 start=0xed4 (3796)
-  [#8] count=2 start=0xf4c (3916)
-  [#9] count=80 start=0xf60 (3936)
+sections[1] (stats+marks) = 0x2ae (686)
+Heart formula:
+  0..13  тЖТ sections[1] + 0x6C + idx*4
+  14     тЖТ sections[1] + 0x32C
+  15..33 тЖТ sections[1] + 0x31C + idx*4
 
-checklist section base (sections[1]) = 0x2ae
-  regular chars base = 0x31a
-  Forgotten special  = 0x5da
-  Bethany+ / Tainted = 0x5ca
+=== Heart start per character ===
+ 0 Isaac          Heart@0x031a  nHHHHHHnHH..  [1,2,2,2,2,2,2,1,2,2,0,0]
+ 1 Magdalene      Heart@0x031e  HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
+ 2 Cain           Heart@0x0322  HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
+ 3 Judas          Heart@0x0326  HHHHHHHHHH..  [2,2,2,2,2,2,2,2,2,2,0,0]
+ 4 ???            Heart@0x032a  HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
+ 5 Eve            Heart@0x032e  HHHHHHHHHH..  [2,2,2,2,2,2,2,2,2,2,0,0]
+ 6 Samson         Heart@0x0332  HH..H.Hn.H..  [2,2,0,0,2,0,2,1,0,2,0,0]
+ 7 Azazel         Heart@0x0336  HHHHHHHnH...  [2,2,2,2,2,2,2,1,2,0,0,0]
+ 8 Lazarus        Heart@0x033a  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+ 9 Eden           Heart@0x033e  1515HHHHHHHH..  [15,15,2,2,2,2,2,2,2,2,0,0]
+10 The Lost       Heart@0x0342  HHH.HHHnHH..  [2,2,2,0,2,2,2,1,2,2,0,0]
+11 Lilith         Heart@0x0346  15HHHHHHHHH..  [15,2,2,2,2,2,2,2,2,2,0,0]
+12 Keeper         Heart@0x034a  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+13 Apollyon       Heart@0x034e  HHHHHHHHHH..  [2,2,2,2,2,2,2,2,2,2,0,0]
+14 Forgotten      Heart@0x05da  HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
+15 Bethany        Heart@0x0606  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+16 Jacob & Esau   Heart@0x060a  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+17 T. Isaac       Heart@0x060e  HHHHHH..H...  [2,2,2,2,2,2,0,0,2,0,0,0]
+18 T. Magdalene   Heart@0x0612  H...........  [2,0,0,0,0,0,0,0,0,0,0,0]
+19 T. Cain        Heart@0x0616  H...........  [2,0,0,0,0,0,0,0,0,0,0,0]
+20 T. Judas       Heart@0x061a  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+21 T. ???         Heart@0x061e  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+22 T. Eve         Heart@0x0622  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+23 T. Samson      Heart@0x0626  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+24 T. Azazel      Heart@0x062a  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+25 T. Lazarus     Heart@0x062e  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+26 T. Eden        Heart@0x0632  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+27 T. Lost        Heart@0x0636  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+28 T. Lilith      Heart@0x063a  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+29 T. Keeper      Heart@0x063e  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+30 T. Apollyon    Heart@0x0642  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+31 T. Forgotten   Heart@0x0646  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+32 T. Bethany     Heart@0x064a  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+33 T. Jacob       Heart@0x064e  ............  [0,0,0,0,0,0,0,0,0,0,0,0]
 
-=== marks per character (0=╨╜╨╡╤В, 1=normal, 2=hard) ===
- 0 Isaac          HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
- 1 Magdalene      HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
- 2 Cain           HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
- 3 Judas          HHHHHHHHHH..  [2,2,2,2,2,2,2,2,2,2,0,0]
- 4 ???            HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
- 5 Eve            HHHHHHHHHH..  [2,2,2,2,2,2,2,2,2,2,0,0]
- 6 Samson         HH..H.Hn.H..  [2,2,0,0,2,0,2,1,0,2,0,0]
- 7 Azazel         HHHHHHHnH...  [2,2,2,2,2,2,2,1,2,0,0,0]
- 8 Lazarus        ............  [0,0,0,0,0,0,0,0,0,0,0,0]
- 9 Eden           1515HHHHHHHH..  [15,15,2,2,2,2,2,2,2,2,0,0]
-10 The Lost       HHH.HHHnHH..  [2,2,2,0,2,2,2,1,2,2,0,0]
-11 Lilith         15HHHHHHHHH..  [15,2,2,2,2,2,2,2,2,2,0,0]
-12 Keeper         ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-13 Apollyon       HHHHHHHHHH..  [2,2,2,2,2,2,2,2,2,2,0,0]
-14 Forgotten      HHHHHHHnHH..  [2,2,2,2,2,2,2,1,2,2,0,0]
-15 Bethany        ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-16 Jacob & Esau   ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-17 T. Isaac       ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-18 T. Magdalene   ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-19 T. Cain        ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-20 T. Judas       ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-21 T. ???         ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-22 T. Eve         ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-23 T. Samson      ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-24 T. Azazel      ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-25 T. Lazarus     ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-26 T. Eden        ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-27 T. Lost        ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-28 T. Lilith      ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-29 T. Keeper      ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-30 T. Apollyon    ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-31 T. Forgotten   ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-32 T. Bethany     ............  [0,0,0,0,0,0,0,0,0,0,0,0]
-33 T. Jacob       ............  [0,0,0,0,0,0,0,0,0,0,0,0]
+=== mark byte offsets per character (uint16 LE, sections[1]=0x2ae) ===
+mark order: Heart Isaac Satan BossRush ??? Lamb Mega Greed Hush Delirium Mother Beast
+ 0 Isaac          nHHHHHHnHH..  0x031a 0x0352 0x038a 0x03c2 0x03fa 0x0432 0x047e 0x04b6 0x04ee 0x0562 0x094a 0x09d2
+ 1 Magdalene      HHHHHHHnHH..  0x031e 0x0356 0x038e 0x03c6 0x03fe 0x0436 0x0482 0x04ba 0x04f2 0x0566 0x094e 0x09d6
+ 2 Cain           HHHHHHHnHH..  0x0322 0x035a 0x0392 0x03ca 0x0402 0x043a 0x0486 0x04be 0x04f6 0x056a 0x0952 0x09da
+ 3 Judas          HHHHHHHHHH..  0x0326 0x035e 0x0396 0x03ce 0x0406 0x043e 0x048a 0x04c2 0x04fa 0x056e 0x0956 0x09de
+ 4 ???            HHHHHHHnHH..  0x032a 0x0362 0x039a 0x03d2 0x040a 0x0442 0x048e 0x04c6 0x04fe 0x0572 0x095a 0x09e2
+ 5 Eve            HHHHHHHHHH..  0x032e 0x0366 0x039e 0x03d6 0x040e 0x0446 0x0492 0x04ca 0x0502 0x0576 0x095e 0x09e6
+ 6 Samson         HH..H.Hn.H..  0x0332 0x036a 0x03a2 0x03da 0x0412 0x044a 0x0496 0x04ce 0x0506 0x057a 0x0962 0x09ea
+ 7 Azazel         HHHHHHHnH...  0x0336 0x036e 0x03a6 0x03de 0x0416 0x044e 0x049a 0x04d2 0x050a 0x057e 0x0966 0x09ee
+ 8 Lazarus        ............  0x033a 0x0372 0x03aa 0x03e2 0x041a 0x0452 0x049e 0x04d6 0x050e 0x0582 0x096a 0x09f2
+ 9 Eden           1515HHHHHHHH..  0x033e 0x0376 0x03ae 0x03e6 0x041e 0x0456 0x04a2 0x04da 0x0512 0x0586 0x096e 0x09f6
+10 The Lost       HHH.HHHnHH..  0x0342 0x037a 0x03b2 0x03ea 0x0422 0x045a 0x04a6 0x04de 0x0516 0x058a 0x0972 0x09fa
+11 Lilith         15HHHHHHHHH..  0x0346 0x037e 0x03b6 0x03ee 0x0426 0x045e 0x04aa 0x04e2 0x051a 0x058e 0x0976 0x09fe
+12 Keeper         ............  0x034a 0x0382 0x03ba 0x03f2 0x042a 0x0462 0x04ae 0x04e6 0x051e 0x0592 0x097a 0x0a02
+13 Apollyon       HHHHHHHHHH..  0x034e 0x0386 0x03be 0x03f6 0x042e 0x0466 0x04b2 0x04ea 0x0522 0x0596 0x097e 0x0a06
+14 Forgotten      HHHHHHHnHH..  0x05da 0x05de 0x05e2 0x05e6 0x05ea 0x05ee 0x05f2 0x05f6 0x05fa 0x0602 0x0982 0x0a0a
+15 Bethany        ............  0x0606 0x0652 0x069e 0x06ea 0x0736 0x0782 0x07ce 0x081a 0x0866 0x08fe 0x0986 0x0a0e
+16 Jacob & Esau   ............  0x060a 0x0656 0x06a2 0x06ee 0x073a 0x0786 0x07d2 0x081e 0x086a 0x0902 0x098a 0x0a12
+17 T. Isaac       HHHHHH..H...  0x060e 0x065a 0x06a6 0x06f2 0x073e 0x078a 0x07d6 0x0822 0x086e 0x0906 0x098e 0x0a16
+18 T. Magdalene   H...........  0x0612 0x065e 0x06aa 0x06f6 0x0742 0x078e 0x07da 0x0826 0x0872 0x090a 0x0992 0x0a1a
+19 T. Cain        H...........  0x0616 0x0662 0x06ae 0x06fa 0x0746 0x0792 0x07de 0x082a 0x0876 0x090e 0x0996 0x0a1e
+20 T. Judas       ............  0x061a 0x0666 0x06b2 0x06fe 0x074a 0x0796 0x07e2 0x082e 0x087a 0x0912 0x099a 0x0a22
+21 T. ???         ............  0x061e 0x066a 0x06b6 0x0702 0x074e 0x079a 0x07e6 0x0832 0x087e 0x0916 0x099e 0x0a26
+22 T. Eve         ............  0x0622 0x066e 0x06ba 0x0706 0x0752 0x079e 0x07ea 0x0836 0x0882 0x091a 0x09a2 0x0a2a
+23 T. Samson      ............  0x0626 0x0672 0x06be 0x070a 0x0756 0x07a2 0x07ee 0x083a 0x0886 0x091e 0x09a6 0x0a2e
+24 T. Azazel      ............  0x062a 0x0676 0x06c2 0x070e 0x075a 0x07a6 0x07f2 0x083e 0x088a 0x0922 0x09aa 0x0a32
+25 T. Lazarus     ............  0x062e 0x067a 0x06c6 0x0712 0x075e 0x07aa 0x07f6 0x0842 0x088e 0x0926 0x09ae 0x0a36
+26 T. Eden        ............  0x0632 0x067e 0x06ca 0x0716 0x0762 0x07ae 0x07fa 0x0846 0x0892 0x092a 0x09b2 0x0a3a
+27 T. Lost        ............  0x0636 0x0682 0x06ce 0x071a 0x0766 0x07b2 0x07fe 0x084a 0x0896 0x092e 0x09b6 0x0a3e
+28 T. Lilith      ............  0x063a 0x0686 0x06d2 0x071e 0x076a 0x07b6 0x0802 0x084e 0x089a 0x0932 0x09ba 0x0a42
+29 T. Keeper      ............  0x063e 0x068a 0x06d6 0x0722 0x076e 0x07ba 0x0806 0x0852 0x089e 0x0936 0x09be 0x0a46
+30 T. Apollyon    ............  0x0642 0x068e 0x06da 0x0726 0x0772 0x07be 0x080a 0x0856 0x08a2 0x093a 0x09c2 0x0a4a
+31 T. Forgotten   ............  0x0646 0x0692 0x06de 0x072a 0x0776 0x07c2 0x080e 0x085a 0x08a6 0x093e 0x09c6 0x0a4e
+32 T. Bethany     ............  0x064a 0x0696 0x06e2 0x072e 0x077a 0x07c6 0x0812 0x085e 0x08aa 0x0942 0x09ca 0x0a52
+33 T. Jacob       ............  0x064e 0x069a 0x06e6 0x0732 0x077e 0x07ca 0x0816 0x0862 0x08ae 0x0946 0x09ce 0x0a56
 
-=== Isaac (0) raw offsets ===
-  Mom's Heart    @ 0x031a = 2
-  Isaac          @ 0x0352 = 2
-  Satan          @ 0x038a = 2
-  Boss Rush      @ 0x03c2 = 2
-  ???            @ 0x03fa = 2
-  The Lamb       @ 0x0432 = 2
-  Mega Satan     @ 0x047e = 2
-  Ultra Greed    @ 0x04b6 = 1
-  Hush           @ 0x04ee = 2
-  Delirium       @ 0x0562 = 2
-  Mother         @ 0x094a = 0
-  The Beast      @ 0x09d2 = 0
+=== mark offsets detailed (name @ addr = value) ===
 
-=== T. Isaac (17) raw offsets ===
-  Mom's Heart    @ 0x060e = 0
-  Isaac          @ 0x065a = 0
-  Satan          @ 0x06a6 = 0
-  Boss Rush      @ 0x06f2 = 0
-  ???            @ 0x073e = 0
-  The Lamb       @ 0x078a = 0
-  Mega Satan     @ 0x07d6 = 0
-  Ultra Greed    @ 0x0822 = 0
-  Hush           @ 0x086e = 0
-  Delirium       @ 0x0906 = 0
-  Mother         @ 0x098e = 0
-  The Beast      @ 0x0a16 = 0
+ 0 Isaac
+   0 Mom's Heart    @ 0x031a = 1
+   1 Isaac          @ 0x0352 = 2
+   2 Satan          @ 0x038a = 2
+   3 Boss Rush      @ 0x03c2 = 2
+   4 ???            @ 0x03fa = 2
+   5 The Lamb       @ 0x0432 = 2
+   6 Mega Satan     @ 0x047e = 2
+   7 Ultra Greed    @ 0x04b6 = 1
+   8 Hush           @ 0x04ee = 2
+   9 Delirium       @ 0x0562 = 2
+  10 Mother         @ 0x094a = 0
+  11 The Beast      @ 0x09d2 = 0
+
+ 1 Magdalene
+   0 Mom's Heart    @ 0x031e = 2
+   1 Isaac          @ 0x0356 = 2
+   2 Satan          @ 0x038e = 2
+   3 Boss Rush      @ 0x03c6 = 2
+   4 ???            @ 0x03fe = 2
+   5 The Lamb       @ 0x0436 = 2
+   6 Mega Satan     @ 0x0482 = 2
+   7 Ultra Greed    @ 0x04ba = 1
+   8 Hush           @ 0x04f2 = 2
+   9 Delirium       @ 0x0566 = 2
+  10 Mother         @ 0x094e = 0
+  11 The Beast      @ 0x09d6 = 0
+
+ 2 Cain
+   0 Mom's Heart    @ 0x0322 = 2
+   1 Isaac          @ 0x035a = 2
+   2 Satan          @ 0x0392 = 2
+   3 Boss Rush      @ 0x03ca = 2
+   4 ???            @ 0x0402 = 2
+   5 The Lamb       @ 0x043a = 2
+   6 Mega Satan     @ 0x0486 = 2
+   7 Ultra Greed    @ 0x04be = 1
+   8 Hush           @ 0x04f6 = 2
+   9 Delirium       @ 0x056a = 2
+  10 Mother         @ 0x0952 = 0
+  11 The Beast      @ 0x09da = 0
+
+ 3 Judas
+   0 Mom's Heart    @ 0x0326 = 2
+   1 Isaac          @ 0x035e = 2
+   2 Satan          @ 0x0396 = 2
+   3 Boss Rush      @ 0x03ce = 2
+   4 ???            @ 0x0406 = 2
+   5 The Lamb       @ 0x043e = 2
+   6 Mega Satan     @ 0x048a = 2
+   7 Ultra Greed    @ 0x04c2 = 2
+   8 Hush           @ 0x04fa = 2
+   9 Delirium       @ 0x056e = 2
+  10 Mother         @ 0x0956 = 0
+  11 The Beast      @ 0x09de = 0
+
+ 4 ???
+   0 Mom's Heart    @ 0x032a = 2
+   1 Isaac          @ 0x0362 = 2
+   2 Satan          @ 0x039a = 2
+   3 Boss Rush      @ 0x03d2 = 2
+   4 ???            @ 0x040a = 2
+   5 The Lamb       @ 0x0442 = 2
+   6 Mega Satan     @ 0x048e = 2
+   7 Ultra Greed    @ 0x04c6 = 1
+   8 Hush           @ 0x04fe = 2
+   9 Delirium       @ 0x0572 = 2
+  10 Mother         @ 0x095a = 0
+  11 The Beast      @ 0x09e2 = 0
+
+ 5 Eve
+   0 Mom's Heart    @ 0x032e = 2
+   1 Isaac          @ 0x0366 = 2
+   2 Satan          @ 0x039e = 2
+   3 Boss Rush      @ 0x03d6 = 2
+   4 ???            @ 0x040e = 2
+   5 The Lamb       @ 0x0446 = 2
+   6 Mega Satan     @ 0x0492 = 2
+   7 Ultra Greed    @ 0x04ca = 2
+   8 Hush           @ 0x0502 = 2
+   9 Delirium       @ 0x0576 = 2
+  10 Mother         @ 0x095e = 0
+  11 The Beast      @ 0x09e6 = 0
+
+ 6 Samson
+   0 Mom's Heart    @ 0x0332 = 2
+   1 Isaac          @ 0x036a = 2
+   2 Satan          @ 0x03a2 = 0
+   3 Boss Rush      @ 0x03da = 0
+   4 ???            @ 0x0412 = 2
+   5 The Lamb       @ 0x044a = 0
+   6 Mega Satan     @ 0x0496 = 2
+   7 Ultra Greed    @ 0x04ce = 1
+   8 Hush           @ 0x0506 = 0
+   9 Delirium       @ 0x057a = 2
+  10 Mother         @ 0x0962 = 0
+  11 The Beast      @ 0x09ea = 0
+
+ 7 Azazel
+   0 Mom's Heart    @ 0x0336 = 2
+   1 Isaac          @ 0x036e = 2
+   2 Satan          @ 0x03a6 = 2
+   3 Boss Rush      @ 0x03de = 2
+   4 ???            @ 0x0416 = 2
+   5 The Lamb       @ 0x044e = 2
+   6 Mega Satan     @ 0x049a = 2
+   7 Ultra Greed    @ 0x04d2 = 1
+   8 Hush           @ 0x050a = 2
+   9 Delirium       @ 0x057e = 0
+  10 Mother         @ 0x0966 = 0
+  11 The Beast      @ 0x09ee = 0
+
+ 8 Lazarus
+   0 Mom's Heart    @ 0x033a = 0
+   1 Isaac          @ 0x0372 = 0
+   2 Satan          @ 0x03aa = 0
+   3 Boss Rush      @ 0x03e2 = 0
+   4 ???            @ 0x041a = 0
+   5 The Lamb       @ 0x0452 = 0
+   6 Mega Satan     @ 0x049e = 0
+   7 Ultra Greed    @ 0x04d6 = 0
+   8 Hush           @ 0x050e = 0
+   9 Delirium       @ 0x0582 = 0
+  10 Mother         @ 0x096a = 0
+  11 The Beast      @ 0x09f2 = 0
+
+ 9 Eden
+   0 Mom's Heart    @ 0x033e = 15
+   1 Isaac          @ 0x0376 = 15
+   2 Satan          @ 0x03ae = 2
+   3 Boss Rush      @ 0x03e6 = 2
+   4 ???            @ 0x041e = 2
+   5 The Lamb       @ 0x0456 = 2
+   6 Mega Satan     @ 0x04a2 = 2
+   7 Ultra Greed    @ 0x04da = 2
+   8 Hush           @ 0x0512 = 2
+   9 Delirium       @ 0x0586 = 2
+  10 Mother         @ 0x096e = 0
+  11 The Beast      @ 0x09f6 = 0
+
+10 The Lost
+   0 Mom's Heart    @ 0x0342 = 2
+   1 Isaac          @ 0x037a = 2
+   2 Satan          @ 0x03b2 = 2
+   3 Boss Rush      @ 0x03ea = 0
+   4 ???            @ 0x0422 = 2
+   5 The Lamb       @ 0x045a = 2
+   6 Mega Satan     @ 0x04a6 = 2
+   7 Ultra Greed    @ 0x04de = 1
+   8 Hush           @ 0x0516 = 2
+   9 Delirium       @ 0x058a = 2
+  10 Mother         @ 0x0972 = 0
+  11 The Beast      @ 0x09fa = 0
+
+11 Lilith
+   0 Mom's Heart    @ 0x0346 = 15
+   1 Isaac          @ 0x037e = 2
+   2 Satan          @ 0x03b6 = 2
+   3 Boss Rush      @ 0x03ee = 2
+   4 ???            @ 0x0426 = 2
+   5 The Lamb       @ 0x045e = 2
+   6 Mega Satan     @ 0x04aa = 2
+   7 Ultra Greed    @ 0x04e2 = 2
+   8 Hush           @ 0x051a = 2
+   9 Delirium       @ 0x058e = 2
+  10 Mother         @ 0x0976 = 0
+  11 The Beast      @ 0x09fe = 0
+
+12 Keeper
+   0 Mom's Heart    @ 0x034a = 0
+   1 Isaac          @ 0x0382 = 0
+   2 Satan          @ 0x03ba = 0
+   3 Boss Rush      @ 0x03f2 = 0
+   4 ???            @ 0x042a = 0
+   5 The Lamb       @ 0x0462 = 0
+   6 Mega Satan     @ 0x04ae = 0
+   7 Ultra Greed    @ 0x04e6 = 0
+   8 Hush           @ 0x051e = 0
+   9 Delirium       @ 0x0592 = 0
+  10 Mother         @ 0x097a = 0
+  11 The Beast      @ 0x0a02 = 0
+
+13 Apollyon
+   0 Mom's Heart    @ 0x034e = 2
+   1 Isaac          @ 0x0386 = 2
+   2 Satan          @ 0x03be = 2
+   3 Boss Rush      @ 0x03f6 = 2
+   4 ???            @ 0x042e = 2
+   5 The Lamb       @ 0x0466 = 2
+   6 Mega Satan     @ 0x04b2 = 2
+   7 Ultra Greed    @ 0x04ea = 2
+   8 Hush           @ 0x0522 = 2
+   9 Delirium       @ 0x0596 = 2
+  10 Mother         @ 0x097e = 0
+  11 The Beast      @ 0x0a06 = 0
+
+14 Forgotten
+   0 Mom's Heart    @ 0x05da = 2
+   1 Isaac          @ 0x05de = 2
+   2 Satan          @ 0x05e2 = 2
+   3 Boss Rush      @ 0x05e6 = 2
+   4 ???            @ 0x05ea = 2
+   5 The Lamb       @ 0x05ee = 2
+   6 Mega Satan     @ 0x05f2 = 2
+   7 Ultra Greed    @ 0x05f6 = 1
+   8 Hush           @ 0x05fa = 2
+   9 Delirium       @ 0x0602 = 2
+  10 Mother         @ 0x0982 = 0
+  11 The Beast      @ 0x0a0a = 0
+
+15 Bethany
+   0 Mom's Heart    @ 0x0606 = 0
+   1 Isaac          @ 0x0652 = 0
+   2 Satan          @ 0x069e = 0
+   3 Boss Rush      @ 0x06ea = 0
+   4 ???            @ 0x0736 = 0
+   5 The Lamb       @ 0x0782 = 0
+   6 Mega Satan     @ 0x07ce = 0
+   7 Ultra Greed    @ 0x081a = 0
+   8 Hush           @ 0x0866 = 0
+   9 Delirium       @ 0x08fe = 0
+  10 Mother         @ 0x0986 = 0
+  11 The Beast      @ 0x0a0e = 0
+
+16 Jacob & Esau
+   0 Mom's Heart    @ 0x060a = 0
+   1 Isaac          @ 0x0656 = 0
+   2 Satan          @ 0x06a2 = 0
+   3 Boss Rush      @ 0x06ee = 0
+   4 ???            @ 0x073a = 0
+   5 The Lamb       @ 0x0786 = 0
+   6 Mega Satan     @ 0x07d2 = 0
+   7 Ultra Greed    @ 0x081e = 0
+   8 Hush           @ 0x086a = 0
+   9 Delirium       @ 0x0902 = 0
+  10 Mother         @ 0x098a = 0
+  11 The Beast      @ 0x0a12 = 0
+
+17 T. Isaac
+   0 Mom's Heart    @ 0x060e = 2
+   1 Isaac          @ 0x065a = 2
+   2 Satan          @ 0x06a6 = 2
+   3 Boss Rush      @ 0x06f2 = 2
+   4 ???            @ 0x073e = 2
+   5 The Lamb       @ 0x078a = 2
+   6 Mega Satan     @ 0x07d6 = 0
+   7 Ultra Greed    @ 0x0822 = 0
+   8 Hush           @ 0x086e = 2
+   9 Delirium       @ 0x0906 = 0
+  10 Mother         @ 0x098e = 0
+  11 The Beast      @ 0x0a16 = 0
+
+18 T. Magdalene
+   0 Mom's Heart    @ 0x0612 = 2
+   1 Isaac          @ 0x065e = 0
+   2 Satan          @ 0x06aa = 0
+   3 Boss Rush      @ 0x06f6 = 0
+   4 ???            @ 0x0742 = 0
+   5 The Lamb       @ 0x078e = 0
+   6 Mega Satan     @ 0x07da = 0
+   7 Ultra Greed    @ 0x0826 = 0
+   8 Hush           @ 0x0872 = 0
+   9 Delirium       @ 0x090a = 0
+  10 Mother         @ 0x0992 = 0
+  11 The Beast      @ 0x0a1a = 0
+
+19 T. Cain
+   0 Mom's Heart    @ 0x0616 = 2
+   1 Isaac          @ 0x0662 = 0
+   2 Satan          @ 0x06ae = 0
+   3 Boss Rush      @ 0x06fa = 0
+   4 ???            @ 0x0746 = 0
+   5 The Lamb       @ 0x0792 = 0
+   6 Mega Satan     @ 0x07de = 0
+   7 Ultra Greed    @ 0x082a = 0
+   8 Hush           @ 0x0876 = 0
+   9 Delirium       @ 0x090e = 0
+  10 Mother         @ 0x0996 = 0
+  11 The Beast      @ 0x0a1e = 0
+
+20 T. Judas
+   0 Mom's Heart    @ 0x061a = 0
+   1 Isaac          @ 0x0666 = 0
+   2 Satan          @ 0x06b2 = 0
+   3 Boss Rush      @ 0x06fe = 0
+   4 ???            @ 0x074a = 0
+   5 The Lamb       @ 0x0796 = 0
+   6 Mega Satan     @ 0x07e2 = 0
+   7 Ultra Greed    @ 0x082e = 0
+   8 Hush           @ 0x087a = 0
+   9 Delirium       @ 0x0912 = 0
+  10 Mother         @ 0x099a = 0
+  11 The Beast      @ 0x0a22 = 0
+
+21 T. ???
+   0 Mom's Heart    @ 0x061e = 0
+   1 Isaac          @ 0x066a = 0
+   2 Satan          @ 0x06b6 = 0
+   3 Boss Rush      @ 0x0702 = 0
+   4 ???            @ 0x074e = 0
+   5 The Lamb       @ 0x079a = 0
+   6 Mega Satan     @ 0x07e6 = 0
+   7 Ultra Greed    @ 0x0832 = 0
+   8 Hush           @ 0x087e = 0
+   9 Delirium       @ 0x0916 = 0
+  10 Mother         @ 0x099e = 0
+  11 The Beast      @ 0x0a26 = 0
+
+22 T. Eve
+   0 Mom's Heart    @ 0x0622 = 0
+   1 Isaac          @ 0x066e = 0
+   2 Satan          @ 0x06ba = 0
+   3 Boss Rush      @ 0x0706 = 0
+   4 ???            @ 0x0752 = 0
+   5 The Lamb       @ 0x079e = 0
+   6 Mega Satan     @ 0x07ea = 0
+   7 Ultra Greed    @ 0x0836 = 0
+   8 Hush           @ 0x0882 = 0
+   9 Delirium       @ 0x091a = 0
+  10 Mother         @ 0x09a2 = 0
+  11 The Beast      @ 0x0a2a = 0
+
+23 T. Samson
+   0 Mom's Heart    @ 0x0626 = 0
+   1 Isaac          @ 0x0672 = 0
+   2 Satan          @ 0x06be = 0
+   3 Boss Rush      @ 0x070a = 0
+   4 ???            @ 0x0756 = 0
+   5 The Lamb       @ 0x07a2 = 0
+   6 Mega Satan     @ 0x07ee = 0
+   7 Ultra Greed    @ 0x083a = 0
+   8 Hush           @ 0x0886 = 0
+   9 Delirium       @ 0x091e = 0
+  10 Mother         @ 0x09a6 = 0
+  11 The Beast      @ 0x0a2e = 0
+
+24 T. Azazel
+   0 Mom's Heart    @ 0x062a = 0
+   1 Isaac          @ 0x0676 = 0
+   2 Satan          @ 0x06c2 = 0
+   3 Boss Rush      @ 0x070e = 0
+   4 ???            @ 0x075a = 0
+   5 The Lamb       @ 0x07a6 = 0
+   6 Mega Satan     @ 0x07f2 = 0
+   7 Ultra Greed    @ 0x083e = 0
+   8 Hush           @ 0x088a = 0
+   9 Delirium       @ 0x0922 = 0
+  10 Mother         @ 0x09aa = 0
+  11 The Beast      @ 0x0a32 = 0
+
+25 T. Lazarus
+   0 Mom's Heart    @ 0x062e = 0
+   1 Isaac          @ 0x067a = 0
+   2 Satan          @ 0x06c6 = 0
+   3 Boss Rush      @ 0x0712 = 0
+   4 ???            @ 0x075e = 0
+   5 The Lamb       @ 0x07aa = 0
+   6 Mega Satan     @ 0x07f6 = 0
+   7 Ultra Greed    @ 0x0842 = 0
+   8 Hush           @ 0x088e = 0
+   9 Delirium       @ 0x0926 = 0
+  10 Mother         @ 0x09ae = 0
+  11 The Beast      @ 0x0a36 = 0
+
+26 T. Eden
+   0 Mom's Heart    @ 0x0632 = 0
+   1 Isaac          @ 0x067e = 0
+   2 Satan          @ 0x06ca = 0
+   3 Boss Rush      @ 0x0716 = 0
+   4 ???            @ 0x0762 = 0
+   5 The Lamb       @ 0x07ae = 0
+   6 Mega Satan     @ 0x07fa = 0
+   7 Ultra Greed    @ 0x0846 = 0
+   8 Hush           @ 0x0892 = 0
+   9 Delirium       @ 0x092a = 0
+  10 Mother         @ 0x09b2 = 0
+  11 The Beast      @ 0x0a3a = 0
+
+27 T. Lost
+   0 Mom's Heart    @ 0x0636 = 0
+   1 Isaac          @ 0x0682 = 0
+   2 Satan          @ 0x06ce = 0
+   3 Boss Rush      @ 0x071a = 0
+   4 ???            @ 0x0766 = 0
+   5 The Lamb       @ 0x07b2 = 0
+   6 Mega Satan     @ 0x07fe = 0
+   7 Ultra Greed    @ 0x084a = 0
+   8 Hush           @ 0x0896 = 0
+   9 Delirium       @ 0x092e = 0
+  10 Mother         @ 0x09b6 = 0
+  11 The Beast      @ 0x0a3e = 0
+
+28 T. Lilith
+   0 Mom's Heart    @ 0x063a = 0
+   1 Isaac          @ 0x0686 = 0
+   2 Satan          @ 0x06d2 = 0
+   3 Boss Rush      @ 0x071e = 0
+   4 ???            @ 0x076a = 0
+   5 The Lamb       @ 0x07b6 = 0
+   6 Mega Satan     @ 0x0802 = 0
+   7 Ultra Greed    @ 0x084e = 0
+   8 Hush           @ 0x089a = 0
+   9 Delirium       @ 0x0932 = 0
+  10 Mother         @ 0x09ba = 0
+  11 The Beast      @ 0x0a42 = 0
+
+29 T. Keeper
+   0 Mom's Heart    @ 0x063e = 0
+   1 Isaac          @ 0x068a = 0
+   2 Satan          @ 0x06d6 = 0
+   3 Boss Rush      @ 0x0722 = 0
+   4 ???            @ 0x076e = 0
+   5 The Lamb       @ 0x07ba = 0
+   6 Mega Satan     @ 0x0806 = 0
+   7 Ultra Greed    @ 0x0852 = 0
+   8 Hush           @ 0x089e = 0
+   9 Delirium       @ 0x0936 = 0
+  10 Mother         @ 0x09be = 0
+  11 The Beast      @ 0x0a46 = 0
+
+30 T. Apollyon
+   0 Mom's Heart    @ 0x0642 = 0
+   1 Isaac          @ 0x068e = 0
+   2 Satan          @ 0x06da = 0
+   3 Boss Rush      @ 0x0726 = 0
+   4 ???            @ 0x0772 = 0
+   5 The Lamb       @ 0x07be = 0
+   6 Mega Satan     @ 0x080a = 0
+   7 Ultra Greed    @ 0x0856 = 0
+   8 Hush           @ 0x08a2 = 0
+   9 Delirium       @ 0x093a = 0
+  10 Mother         @ 0x09c2 = 0
+  11 The Beast      @ 0x0a4a = 0
+
+31 T. Forgotten
+   0 Mom's Heart    @ 0x0646 = 0
+   1 Isaac          @ 0x0692 = 0
+   2 Satan          @ 0x06de = 0
+   3 Boss Rush      @ 0x072a = 0
+   4 ???            @ 0x0776 = 0
+   5 The Lamb       @ 0x07c2 = 0
+   6 Mega Satan     @ 0x080e = 0
+   7 Ultra Greed    @ 0x085a = 0
+   8 Hush           @ 0x08a6 = 0
+   9 Delirium       @ 0x093e = 0
+  10 Mother         @ 0x09c6 = 0
+  11 The Beast      @ 0x0a4e = 0
+
+32 T. Bethany
+   0 Mom's Heart    @ 0x064a = 0
+   1 Isaac          @ 0x0696 = 0
+   2 Satan          @ 0x06e2 = 0
+   3 Boss Rush      @ 0x072e = 0
+   4 ???            @ 0x077a = 0
+   5 The Lamb       @ 0x07c6 = 0
+   6 Mega Satan     @ 0x0812 = 0
+   7 Ultra Greed    @ 0x085e = 0
+   8 Hush           @ 0x08aa = 0
+   9 Delirium       @ 0x0942 = 0
+  10 Mother         @ 0x09ca = 0
+  11 The Beast      @ 0x0a52 = 0
+
+33 T. Jacob
+   0 Mom's Heart    @ 0x064e = 0
+   1 Isaac          @ 0x069a = 0
+   2 Satan          @ 0x06e6 = 0
+   3 Boss Rush      @ 0x0732 = 0
+   4 ???            @ 0x077e = 0
+   5 The Lamb       @ 0x07ca = 0
+   6 Mega Satan     @ 0x0816 = 0
+   7 Ultra Greed    @ 0x0862 = 0
+   8 Hush           @ 0x08ae = 0
+   9 Delirium       @ 0x0946 = 0
+  10 Mother         @ 0x09ce = 0
+  11 The Beast      @ 0x0a56 = 0
